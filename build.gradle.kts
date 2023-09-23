@@ -22,8 +22,17 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	// Functional Programming
+	implementation("io.arrow-kt:arrow-core:1.2.0")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	testImplementation("io.kotest.extensions:kotest-assertions-arrow:1.3.0") {
+		because("provides good testing for arrow")
+	}
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
