@@ -1,4 +1,4 @@
-package com.example.excepcionesexcepcionales.user.domain
+package com.example.excepcionesexcepcionales.solution.user.domain
 
 data class Document(
     val type: DocumentType,
