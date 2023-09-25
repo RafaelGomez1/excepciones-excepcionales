@@ -23,6 +23,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
+	// H2
+	runtimeOnly("com.h2database:h2")
+
 	// Functional Programming
 	implementation("io.arrow-kt:arrow-core:1.2.0")
 

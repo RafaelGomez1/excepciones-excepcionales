@@ -7,7 +7,6 @@ import com.example.excepcionesexcepcionales.solution.user.application.create.fun
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidMobilePhone
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidName
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidSurname
-import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.SealedUserCreator
 import com.example.excepcionesexcepcionales.solution.user.domain.Email
 import com.example.excepcionesexcepcionales.solution.user.domain.Name
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
@@ -17,14 +16,14 @@ import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
 import java.time.ZonedDateTime
 import java.util.UUID
 
-class CreateFunctionalUserCommandHandler(
+class FunctionalCreateUserCommandHandler(
     repository: UserRepository,
     publisher: DomainEventPublisher
 ) {
 
     private val creator = FunctionalUserCreator(repository, publisher)
     
-    fun handle(command: CreateFunctionalUserCommand): Either<CreateUserError, Unit> = either {
+    fun handle(command: FunctionalCreateUserCommand): Either<CreateUserError, Unit> = either {
         with(command) {
             val name = Name.createOrElse(name) { InvalidName }.bind()
             val surname = Surname.createOrElse(surname) { InvalidSurname }.bind()
@@ -43,7 +42,7 @@ class CreateFunctionalUserCommandHandler(
     }
 }
 
-data class CreateFunctionalUserCommand(
+data class FunctionalCreateUserCommand(
     val id: UUID,
     val email: String,
     val phonePrefix: String,

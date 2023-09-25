@@ -1,4 +1,4 @@
-package com.example.excepcionesexcepcionales.solution.user.application.create.imperative
+package com.example.excepcionesexcepcionales.session.user.application.create
 
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.domain.Email

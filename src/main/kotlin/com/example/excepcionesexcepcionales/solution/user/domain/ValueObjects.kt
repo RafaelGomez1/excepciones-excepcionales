@@ -16,46 +16,46 @@ value class UserId(val value: UUID) {
 @JvmInline
 value class Name private constructor(val value: String) {
     init {
-        if (!isValid(value)) throw InvalidNameException(value)
+        if (isNotValid(value)) throw InvalidNameException(value)
     }
 
     class InvalidNameException(name: String) : Throwable("Name $name invalid")
 
     companion object {
-        private fun isValid(value: String): Boolean = value.isBlank() || value.length > 50
+        private fun isNotValid(value: String): Boolean = value.isBlank() || value.length > 50
 
         fun create(value: String): Name = Name(value)
 
         fun validated(value: String): Validation<Name> =
-            if(isValid(value)) Success(Name(value))
-            else Failure()
+            if(isNotValid(value)) Failure()
+            else Success(Name(value))
 
         fun <Error> createOrElse(value: String, onError: () -> Error): Either<Error, Name> =
-            if(isValid(value)) Name(value).right()
-            else onError().left()
+            if(isNotValid(value)) onError().left()
+            else Name(value).right()
     }
 }
 
 @JvmInline
 value class Surname private constructor(val value: String) {
     init {
-        if (!isValid(value)) throw InvalidSurnameException(value)
+        if (isNotValid(value)) throw InvalidSurnameException(value)
     }
 
     class InvalidSurnameException(name: String) : Throwable("Surname $name invalid")
 
     companion object {
-        private fun isValid(value: String) = value.isBlank() || value.length > 80
+        private fun isNotValid(value: String) = value.isBlank() || value.length > 80
 
         fun create(value: String): Surname = Surname(value)
 
         fun validated(value: String): Validation<Surname> =
-            if(isValid(value)) Success(Surname(value))
-            else Failure()
+            if(isNotValid(value)) Failure()
+            else Success(Surname(value))
 
         fun <Error> createOrElse(value: String, onError: () -> Error): Either<Error, Surname> =
-            if(isValid(value)) Surname(value).right()
-            else onError().left()
+            if(isNotValid(value)) onError().left()
+            else Surname(value).right()
     }
 }
 
@@ -93,10 +93,10 @@ data class PhoneNumber private constructor(private val number: String, private v
     fun fullNumber() = prefix + number
 
     private fun validate(num: String) {
-        if (!regex.matches(num)) throw InvalidMobilePhoneException(num)
+        if (!regex.matches(num)) throw InvalidPhoneNumberException(num)
     }
 
-    class InvalidMobilePhoneException(number: String) : Throwable("Mobile phone +$number invalid")
+    class InvalidPhoneNumberException(number: String) : Throwable("Mobile phone +$number invalid")
 
     companion object {
         private val regex = "^\\+(?:[0-9] ?){6,14}[0-9]\$".toRegex()

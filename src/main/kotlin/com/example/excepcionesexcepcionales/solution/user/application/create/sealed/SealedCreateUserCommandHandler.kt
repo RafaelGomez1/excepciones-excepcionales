@@ -16,14 +16,14 @@ import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
 import java.time.ZonedDateTime
 import java.util.UUID
 
-class CreateSealedUserCommandHandler(
+class SealedCreateUserCommandHandler(
     repository: UserRepository,
     publisher: DomainEventPublisher
 ) {
 
     private val creator = SealedUserCreator(repository, publisher)
 
-    fun handle(command: CreateSealedUserCommand): CreateUserResult {
+    fun handle(command: SealedCreateUserCommand): CreateUserResult {
         val nameResult = Name.validated(command.name)
         val surnameResult = Surname.validated(command.surname)
         val emailResult = Email.validated(command.email)
@@ -45,7 +45,7 @@ class CreateSealedUserCommandHandler(
     }
 }
 
-data class CreateSealedUserCommand(
+data class SealedCreateUserCommand(
     val id: UUID,
     val email: String,
     val phonePrefix: String,

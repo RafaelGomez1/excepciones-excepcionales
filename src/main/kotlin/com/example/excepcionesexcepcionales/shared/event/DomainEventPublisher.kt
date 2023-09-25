@@ -2,6 +2,8 @@ package com.example.excepcionesexcepcionales.shared.event
 
 import arrow.core.Either
 import arrow.core.Either.Companion.catch
+import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Success
+import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Unknown
 import java.time.ZonedDateTime
 
 interface DomainEventPublisher {
@@ -14,6 +16,17 @@ fun <Error> DomainEventPublisher.publishOrElse(
 ): Either<Error, Unit> =
     catch { publish(events) }
         .mapLeft{ error -> onError(error) }
+
+fun DomainEventPublisher.publishOrElse(events: List<DomainEvent>): PublisherResult =
+    runCatching { publish(events) }
+        .map { Success }
+        .getOrElse { error -> Unknown(error) }
+
+sealed interface PublisherResult {
+    object Success : PublisherResult
+    class Unknown(val error: Throwable) : PublisherResult
+}
+
 
 sealed interface DomainEvent {
     data class UserCreatedEvent(
