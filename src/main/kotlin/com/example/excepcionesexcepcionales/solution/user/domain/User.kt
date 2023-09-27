@@ -96,12 +96,12 @@ data class User(
         cardStatus = cardStatus.name
     )
 
-    class NotAllDocumentVerifiedException() : Throwable()
-    class UserAlreadyVerifiedException() : Throwable()
-    class UserStatusCannotBeVerifiedException() : Throwable()
-    class CardStatusNotConfirmedException() : Throwable()
-    class CannotChangeEmailToTheSameValueException() : Throwable()
-    class UserAlreadyExistsException() : Throwable()
+    class NotAllDocumentVerifiedException() : RuntimeException()
+    class UserAlreadyVerifiedException() : RuntimeException()
+    class UserStatusCannotBeVerifiedException() : RuntimeException()
+    class CardStatusNotConfirmedException() : RuntimeException()
+    class CannotChangeEmailToTheSameValueException() : RuntimeException()
+    class UserAlreadyExistsException() : RuntimeException()
 }
 
 

@@ -1,5 +1,7 @@
 package com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.imperative
 
+import com.example.excepcionesexcepcionales.shared.clock.Clock
+import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommand
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.domain.Email.InvalidEmailException
@@ -13,8 +15,6 @@ import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.cr
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_PHONE_NUMBER
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_SURNAME
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_EXISTS
-import java.time.ZonedDateTime
-import java.util.UUID
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.CREATED
@@ -26,7 +26,11 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestController
-class ImperativeCreateUserController(private val handler: ImperativeCreateUserCommandHandler) {
+class ImperativeCreateUserController(
+    private val handler: ImperativeCreateUserCommandHandler,
+    private val idGenerator: IdGenerator,
+    private val clock: Clock
+) {
 
     @PostMapping("/imperative/users")
     @ResponseStatus(CREATED)
@@ -34,36 +38,37 @@ class ImperativeCreateUserController(private val handler: ImperativeCreateUserCo
         with(body) {
             handler.handle(
                 ImperativeCreateUserCommand(
-                    id = UUID.randomUUID(),
+                    id = idGenerator.generate(),
                     email = email,
                     phonePrefix = phonePrefix,
                     phoneNumber = phoneNumber,
                     name = name,
                     surname = surname,
-                    createdOn = ZonedDateTime.now()
+                    createdOn = clock.now()
                 )
             )
         }
 
     @RestControllerAdvice(assignableTypes = [ImperativeCreateUserController::class])
     class ImperativeCreateUserControllerExceptionHandler {
-        @ExceptionHandler(value = [UserAlreadyExistsException::class])
+
+        @ExceptionHandler(UserAlreadyExistsException::class)
         @ResponseStatus(CONFLICT)
         fun userAlreadyExists(e: UserAlreadyExistsException) = USER_ALREADY_EXISTS
 
-        @ExceptionHandler(value = [InvalidNameException::class])
+        @ExceptionHandler(InvalidNameException::class)
         @ResponseStatus(BAD_REQUEST)
         fun invalidName(e: InvalidNameException) = INVALID_NAME
 
-        @ExceptionHandler(value = [InvalidSurnameException::class])
+        @ExceptionHandler(InvalidSurnameException::class)
         @ResponseStatus(BAD_REQUEST)
         fun handleNotFound(e: InvalidSurnameException) = INVALID_SURNAME
 
-        @ExceptionHandler(value = [InvalidEmailException::class])
+        @ExceptionHandler(InvalidEmailException::class)
         @ResponseStatus(BAD_REQUEST)
         fun handleNotFound(e: InvalidEmailException) = INVALID_EMAIL
 
-        @ExceptionHandler(value = [InvalidPhoneNumberException::class])
+        @ExceptionHandler(InvalidPhoneNumberException::class)
         @ResponseStatus(BAD_REQUEST)
         fun handleNotFound(e: InvalidPhoneNumberException) = INVALID_PHONE_NUMBER
     }

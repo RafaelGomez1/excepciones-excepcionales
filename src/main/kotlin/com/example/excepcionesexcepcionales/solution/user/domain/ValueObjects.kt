@@ -19,7 +19,7 @@ value class Name private constructor(val value: String) {
         if (isNotValid(value)) throw InvalidNameException(value)
     }
 
-    class InvalidNameException(name: String) : Throwable("Name $name invalid")
+    class InvalidNameException(name: String) : RuntimeException("Name $name invalid")
 
     companion object {
         private fun isNotValid(value: String): Boolean = value.isBlank() || value.length > 50
@@ -42,7 +42,7 @@ value class Surname private constructor(val value: String) {
         if (isNotValid(value)) throw InvalidSurnameException(value)
     }
 
-    class InvalidSurnameException(name: String) : Throwable("Surname $name invalid")
+    class InvalidSurnameException(name: String) : RuntimeException("Surname $name invalid")
 
     companion object {
         private fun isNotValid(value: String) = value.isBlank() || value.length > 80
@@ -65,7 +65,7 @@ data class Email private constructor(val value: String) {
     }
 
     override fun toString(): String = value
-    class InvalidEmailException(email: String) : Throwable("Email $email invalid")
+    class InvalidEmailException(email: String) : RuntimeException("Email $email invalid")
 
     companion object {
         private val regex: Regex =
@@ -96,7 +96,7 @@ data class PhoneNumber private constructor(private val number: String, private v
         if (!regex.matches(num)) throw InvalidPhoneNumberException(num)
     }
 
-    class InvalidPhoneNumberException(number: String) : Throwable("Mobile phone +$number invalid")
+    class InvalidPhoneNumberException(number: String) : RuntimeException("Mobile phone +$number invalid")
 
     companion object {
         private val regex = "^\\+(?:[0-9] ?){6,14}[0-9]\$".toRegex()

@@ -1,5 +1,7 @@
 package com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.sealed
 
+import com.example.excepcionesexcepcionales.shared.clock.Clock
+import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.CreateUserResult
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.CreateUserResult.InvalidEmail
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.CreateUserResult.InvalidMobilePhone
@@ -26,25 +28,29 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SealedCreateUserController(private val handler: SealedCreateUserCommandHandler) {
+class SealedCreateUserController(
+    private val handler: SealedCreateUserCommandHandler,
+    private val idGenerator: IdGenerator,
+    private val clock: Clock
+) {
 
-    @PostMapping("/imperative/users")
+    @PostMapping("/sealed/users")
     fun create(@RequestBody body: CreateUserRequestBody): ResponseEntity<*> =
         with(body) {
             handler.handle(
                 SealedCreateUserCommand(
-                    id = UUID.randomUUID(),
+                    id = idGenerator.generate(),
                     email = email,
                     phonePrefix = phonePrefix,
                     phoneNumber = phoneNumber,
                     name = name,
                     surname = surname,
-                    createdOn = ZonedDateTime.now()
+                    createdOn = clock.now()
                 )
-            ).toServerError()
+            ).toServerResponse()
         }
 
-    private fun CreateUserResult.toServerError(): ResponseEntity<*> =
+    private fun CreateUserResult.toServerResponse(): ResponseEntity<*> =
         when(this) {
             is InvalidEmail -> ResponseEntity.badRequest().body(INVALID_EMAIL)
             is InvalidMobilePhone -> ResponseEntity.badRequest().body(INVALID_PHONE_NUMBER)

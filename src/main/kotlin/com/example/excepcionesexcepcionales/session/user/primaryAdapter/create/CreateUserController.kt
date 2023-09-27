@@ -2,6 +2,8 @@ package com.example.excepcionesexcepcionales.session.user.primaryAdapter.create
 
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommand
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommandHandler
+import com.example.excepcionesexcepcionales.shared.clock.Clock
+import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import com.example.excepcionesexcepcionales.solution.user.domain.Email.InvalidEmailException
 import com.example.excepcionesexcepcionales.solution.user.domain.Name.InvalidNameException
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber.InvalidPhoneNumberException
@@ -21,7 +23,11 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestController
-class CreateUserController(private val handler: CreateUserCommandHandler) {
+class CreateUserController(
+    private val handler: CreateUserCommandHandler,
+    private val idGenerator: IdGenerator,
+    private val clock: Clock
+) {
 
     @PostMapping("/users")
     @ResponseStatus(CREATED)
@@ -29,13 +35,13 @@ class CreateUserController(private val handler: CreateUserCommandHandler) {
         with(body) {
             handler.handle(
                 CreateUserCommand(
-                    id = UUID.randomUUID(),
+                    id = idGenerator.generate(),
                     email = email,
                     phonePrefix = phonePrefix,
                     phoneNumber = phoneNumber,
                     name = name,
                     surname = surname,
-                    createdOn = ZonedDateTime.now()
+                    createdOn = clock.now()
                 )
             )
         }

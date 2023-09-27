@@ -35,7 +35,7 @@ sealed interface RepositoryResult<T> {
 
 sealed interface ExistsUserCriteria {
     class ById(val id: UserId) : ExistsUserCriteria
-    class ByEmail(val id: Email) : ExistsUserCriteria
+    class ByEmail(val email: Email) : ExistsUserCriteria
 }
 
 sealed interface FindUserCriteria {

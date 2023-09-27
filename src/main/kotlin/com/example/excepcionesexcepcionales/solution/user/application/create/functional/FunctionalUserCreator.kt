@@ -32,7 +32,8 @@ class FunctionalUserCreator(
         name: Name,
         surname: Surname
     ): Either<CreateUserError, Unit> =
-        repository.exists(ByEmail(email)).failIfTrue { UserAlreadyExists }
+        repository.exists(ByEmail(email))
+            .failIfTrue { UserAlreadyExists }
             .map { User.create(id, email, phoneNumber, createdOn, name, surname) }
             .flatMap { user -> repository.saveOrElse(user) { error -> Unknown(error) } }
             .flatMap { user -> publisher.publishOrElse(user.pullEvents()) { error -> Unknown(error) } }

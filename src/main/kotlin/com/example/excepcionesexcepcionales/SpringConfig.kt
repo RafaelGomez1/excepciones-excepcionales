@@ -1,8 +1,12 @@
 package com.example.excepcionesexcepcionales
 
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommandHandler
+import com.example.excepcionesexcepcionales.shared.clock.Clock
+import com.example.excepcionesexcepcionales.shared.clock.UTCClock
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
 import com.example.excepcionesexcepcionales.shared.event.InMemoryEventPublisher
+import com.example.excepcionesexcepcionales.shared.id.IdGenerator
+import com.example.excepcionesexcepcionales.shared.id.UUIDGenerator
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.FunctionalCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.SealedCreateUserCommandHandler
@@ -15,6 +19,8 @@ import org.springframework.context.annotation.Configuration
 class SpringConfig {
 
     @Bean fun publisher(): DomainEventPublisher = InMemoryEventPublisher()
+    @Bean fun clock(): Clock = UTCClock()
+    @Bean fun idGenerator(): IdGenerator = UUIDGenerator()
 
     @Bean
     fun createUserCommandHandler(
