@@ -39,6 +39,13 @@ object UserMother {
             cardStatus = cardStatus
         )
     }
+
+    fun incomplete(): User =
+        random(
+            documents = emptySet(),
+            cardStatus = CardStatus.PENDING,
+            status = Status.INCOMPLETE
+        )
 }
 object DocumentMother {
     fun createValidDocument(): Document {

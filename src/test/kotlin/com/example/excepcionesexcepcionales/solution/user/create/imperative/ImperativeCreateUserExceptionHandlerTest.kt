@@ -1,4 +1,4 @@
-package com.example.excepcionesexcepcionales.solution.user.create
+package com.example.excepcionesexcepcionales.solution.user.create.imperative
 
 import com.example.excepcionesexcepcionales.shared.clock.Clock
 import com.example.excepcionesexcepcionales.shared.id.IdGenerator
@@ -11,7 +11,7 @@ import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlread
 import com.example.excepcionesexcepcionales.solution.user.mothers.ImperativeCreateUserCommandMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.imperative.ImperativeCreateUserController
-import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.imperative.ImperativeCreateUserController.ImperativeCreateUserControllerExceptionHandler
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.imperative.ImperativeCreateUserControllerExceptionHandler
 import java.util.stream.Stream
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(controllers = [ImperativeCreateUserController::class])
 @ContextConfiguration(classes = [ImperativeCreateUserController::class, ImperativeCreateUserControllerExceptionHandler::class])
-internal class ImperativeCreateUserTest {
+internal class ImperativeCreateUserExceptionHandlerTest {
 
     @Autowired private lateinit var mockMvc: MockMvc
 
@@ -85,8 +85,8 @@ internal class ImperativeCreateUserTest {
               "email": "${user.email}",
               "phoneNumber": "${user.phoneNumber.number()}",
               "phonePrefix": "${user.phoneNumber.prefix()}",
-              "name": "${user.name}",
-              "surname": "${user.surname}"
+              "name": "${user.name.value}",
+              "surname": "${user.surname.value}"
             }
         """.trimIndent()
 

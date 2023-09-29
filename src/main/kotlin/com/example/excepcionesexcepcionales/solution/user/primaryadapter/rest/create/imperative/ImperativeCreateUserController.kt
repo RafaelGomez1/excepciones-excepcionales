@@ -48,28 +48,28 @@ class ImperativeCreateUserController(
                 )
             )
         }
+}
 
-    @RestControllerAdvice(assignableTypes = [ImperativeCreateUserController::class])
-    class ImperativeCreateUserControllerExceptionHandler {
+@RestControllerAdvice(assignableTypes = [ImperativeCreateUserController::class])
+class ImperativeCreateUserControllerExceptionHandler {
 
-        @ExceptionHandler(UserAlreadyExistsException::class)
-        @ResponseStatus(CONFLICT)
-        fun userAlreadyExists(e: UserAlreadyExistsException) = USER_ALREADY_EXISTS
+    @ExceptionHandler(UserAlreadyExistsException::class)
+    @ResponseStatus(CONFLICT)
+    fun userAlreadyExists(e: UserAlreadyExistsException) = USER_ALREADY_EXISTS
 
-        @ExceptionHandler(InvalidNameException::class)
-        @ResponseStatus(BAD_REQUEST)
-        fun invalidName(e: InvalidNameException) = INVALID_NAME
+    @ExceptionHandler(InvalidNameException::class)
+    @ResponseStatus(BAD_REQUEST)
+    fun invalidName(e: InvalidNameException) = INVALID_NAME
 
-        @ExceptionHandler(InvalidSurnameException::class)
-        @ResponseStatus(BAD_REQUEST)
-        fun handleNotFound(e: InvalidSurnameException) = INVALID_SURNAME
+    @ExceptionHandler(InvalidSurnameException::class)
+    @ResponseStatus(BAD_REQUEST)
+    fun handleNotFound(e: InvalidSurnameException) = INVALID_SURNAME
 
-        @ExceptionHandler(InvalidEmailException::class)
-        @ResponseStatus(BAD_REQUEST)
-        fun handleNotFound(e: InvalidEmailException) = INVALID_EMAIL
+    @ExceptionHandler(InvalidEmailException::class)
+    @ResponseStatus(BAD_REQUEST)
+    fun handleNotFound(e: InvalidEmailException) = INVALID_EMAIL
 
-        @ExceptionHandler(InvalidPhoneNumberException::class)
-        @ResponseStatus(BAD_REQUEST)
-        fun handleNotFound(e: InvalidPhoneNumberException) = INVALID_PHONE_NUMBER
-    }
+    @ExceptionHandler(InvalidPhoneNumberException::class)
+    @ResponseStatus(BAD_REQUEST)
+    fun handleNotFound(e: InvalidPhoneNumberException) = INVALID_PHONE_NUMBER
 }

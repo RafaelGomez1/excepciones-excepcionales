@@ -49,8 +49,8 @@ class SealedUserCreator(
     ): CreateUserResult =
         when(this) {
             is RepoSuccess ->
-                if (value) Success(User.create(id, email, phoneNumber, createdOn, name, surname))
-                else UserAlreadyExists
+                if (value) UserAlreadyExists
+                else Success(User.create(id, email, phoneNumber, createdOn, name, surname))
             is RepoUnknown -> Unknown(this.error)
         }
 

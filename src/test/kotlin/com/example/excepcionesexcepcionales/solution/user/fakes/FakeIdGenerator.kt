@@ -4,7 +4,10 @@ import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import java.util.UUID
 
 object FakeIdGenerator : IdGenerator {
-    override fun generate(): UUID {
-        TODO("Not yet implemented")
-    }
+    private val ids = mutableListOf<UUID>()
+
+    fun shouldGenerate(vararg generatedIds: UUID) { generatedIds.forEach { ids.add(it) } }
+    fun resetFake() { ids.clear() }
+
+    override fun generate(): UUID = ids.removeFirst()
 }
