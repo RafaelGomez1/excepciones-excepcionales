@@ -28,6 +28,24 @@ fun <Error> UserRepository.saveOrElse(
         .mapLeft{ error -> onError(error) }
         .map { user }
 
+fun <Error> UserRepository.findOrElse(
+    criteria: FindUserCriteria,
+    onNotFound: () -> Error,
+    onError: (Throwable) -> Error,
+): Either<Error, User> =
+    find(criteria)
+        .mapLeft{ error ->
+            if (error is NoSuchElementException) onNotFound()
+            else onError(error)
+        }
+
+fun <Error> UserRepository.existsOrElse(
+    criteria: ExistsUserCriteria,
+    onError: (Throwable) -> Error
+): Either<Error, Boolean> =
+    exists(criteria)
+        .mapLeft{ error -> onError(error) }
+
 sealed interface RepositoryResult<T> {
     class Success<T>(val value: T): RepositoryResult<T>
     class Unknown<T>(val error: Throwable): RepositoryResult<T>

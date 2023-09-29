@@ -12,16 +12,14 @@ fun <Error, VO> withError(block: () -> VO, onError: () -> Error): Either<Error, 
     catch { block() }
         .mapLeft { onError() }
 
-fun <Error> Either<Throwable, Boolean>.failIfTrue(failure: () -> Error): Either<Error, Boolean> =
-    mapLeft { failure() }
-        .flatMap {
+fun <Error> Either<Error, Boolean>.failIfTrue(failure: () -> Error): Either<Error, Boolean> =
+        flatMap {
             if (it) failure().left()
             else it.right()
         }
 
-fun <Error> Either<Throwable, Boolean>.failIfFalse(failure: () -> Error): Either<Error, Boolean> =
-    mapLeft { failure() }
-        .flatMap {
+fun <Error> Either<Error, Boolean>.failIfFalse(failure: () -> Error): Either<Error, Boolean> =
+        flatMap {
             if (!it) failure().left()
             else it.right()
         }

@@ -9,8 +9,6 @@ class UserFinder(private val repository: UserRepository) {
     fun invoke(id: UserId): User =
         if (!repository.existBy(id)) throw UserDoesNotExistException()
         else repository.findBy(id)
-
-
 }
 
 class UserDoesNotExistException : Throwable()
