@@ -2,11 +2,11 @@ package com.example.excepcionesexcepcionales.solution.user.application.verify.im
 
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 import java.util.UUID
 
 class ImperativeVerifyUserCommandHandler(
-    repository: UserRepository,
+    repository: SolutionUserRepository,
     publisher: DomainEventPublisher
 ) {
 

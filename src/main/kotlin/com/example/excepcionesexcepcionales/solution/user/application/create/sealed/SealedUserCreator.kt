@@ -10,9 +10,9 @@ import com.example.excepcionesexcepcionales.solution.user.domain.Name
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname
-import com.example.excepcionesexcepcionales.solution.user.domain.User
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 import java.time.ZonedDateTime
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Success as RepoSuccess
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Unknown as RepoUnknown
@@ -20,7 +20,7 @@ import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Success
 import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Unknown as PubUnknown
 
 class SealedUserCreator(
-    private val repository: UserRepository,
+    private val repository: SolutionUserRepository,
     private val publisher: DomainEventPublisher
 ) {
 
@@ -50,7 +50,7 @@ class SealedUserCreator(
         when(this) {
             is RepoSuccess ->
                 if (value) UserAlreadyExists
-                else Success(User.create(id, email, phoneNumber, createdOn, name, surname))
+                else Success(SolutionUser.create(id, email, phoneNumber, createdOn, name, surname))
             is RepoUnknown -> Unknown(this.error)
         }
 
@@ -79,7 +79,7 @@ sealed interface CreateUserResult {
     object InvalidMobilePhone : CreateUserResult
 
     object UserAlreadyExists : CreateUserResult
-    class Success(val user: User): CreateUserResult
+    class Success(val user: SolutionUser): CreateUserResult
     class Unknown(val error: Throwable): CreateUserResult
 }
 

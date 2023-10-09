@@ -7,7 +7,7 @@ import com.example.excepcionesexcepcionales.solution.user.domain.Email.InvalidEm
 import com.example.excepcionesexcepcionales.solution.user.domain.Name.InvalidNameException
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber.InvalidPhoneNumberException
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname.InvalidSurnameException
-import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.mothers.ImperativeCreateUserCommandMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.imperative.ImperativeCreateUserController

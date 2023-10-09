@@ -4,7 +4,7 @@ import com.example.excepcionesexcepcionales.solution.user.application.create.fun
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeClock
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeIdGenerator
-import com.example.excepcionesexcepcionales.solution.user.fakes.FakeUserRepository
+import com.example.excepcionesexcepcionales.solution.user.fakes.FakeSolutionUserRepository
 import com.example.excepcionesexcepcionales.solution.user.mothers.CreateUserRequestBodyMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserCreatedEventMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus
 
 class FunctionalCreateUserTest {
 
-    private val repository = FakeUserRepository
+    private val repository = FakeSolutionUserRepository
     private val publisher = FakeDomainEventPublisher
     private val idGenerator = FakeIdGenerator
     private val clock = FakeClock

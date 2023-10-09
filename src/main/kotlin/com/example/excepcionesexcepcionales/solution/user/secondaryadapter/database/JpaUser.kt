@@ -1,20 +1,18 @@
 package com.example.excepcionesexcepcionales.solution.user.secondaryadapter.database
 
 import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus
-import com.example.excepcionesexcepcionales.solution.user.domain.Document
 import com.example.excepcionesexcepcionales.solution.user.domain.Email
 import com.example.excepcionesexcepcionales.solution.user.domain.Name
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.solution.user.domain.Status
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname
-import com.example.excepcionesexcepcionales.solution.user.domain.User
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.ZonedDateTime
 import java.util.UUID
-import org.springframework.data.jpa.repository.EntityGraph
 
 @Entity
 @Table
@@ -30,7 +28,7 @@ data class JpaUser(
     val status: String,
     val cardStatus: String
 ) {
-    fun toDomain(): User = User(
+    fun toSolutionDomain(): SolutionUser = SolutionUser(
         id = UserId(value = id),
         email = Email.create(value = email),
         phoneNumber = PhoneNumber.create(
@@ -46,7 +44,7 @@ data class JpaUser(
     )
 }
 
-internal fun User.toJpa() = JpaUser(
+fun SolutionUser.toJpa() = JpaUser(
     id = id.value,
     email = email.value,
     phoneNumber = phoneNumber.number(),

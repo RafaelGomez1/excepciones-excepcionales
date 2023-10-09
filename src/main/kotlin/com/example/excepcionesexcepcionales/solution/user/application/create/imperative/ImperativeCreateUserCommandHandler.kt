@@ -6,13 +6,13 @@ import com.example.excepcionesexcepcionales.solution.user.domain.Name
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 import java.time.ZonedDateTime
 import java.util.UUID
 
 
 class ImperativeCreateUserCommandHandler(
-    repository: UserRepository,
+    repository: SolutionUserRepository,
     publisher: DomainEventPublisher
 ) {
     

@@ -7,37 +7,38 @@ import com.example.excepcionesexcepcionales.solution.user.domain.ExistsUserCrite
 import com.example.excepcionesexcepcionales.solution.user.domain.ExistsUserCriteria.ByEmail
 import com.example.excepcionesexcepcionales.solution.user.domain.ExistsUserCriteria.ById
 import com.example.excepcionesexcepcionales.solution.user.domain.FindUserCriteria
+import com.example.excepcionesexcepcionales.solution.user.domain.FindUserCriteria.ById as FindById
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Success
-import com.example.excepcionesexcepcionales.solution.user.domain.User
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 
-object FakeUserRepository : UserRepository, FakeRepository<User> {
-    override val elements = mutableListOf<User>()
+object FakeSolutionUserRepository : SolutionUserRepository, FakeRepository<SolutionUser> {
+    override val elements = mutableListOf<SolutionUser>()
 
-    override fun findBy(userId: UserId): User = elements.first { it.id == userId }
+    override fun findBy(userId: UserId): SolutionUser = elements.first { it.id == userId }
 
     override fun existBy(userId: UserId): Boolean = elements.any { it.id == userId }
 
     override fun existBy(email: Email): Boolean = elements.any { it.email == email }
 
-    override fun save(user: User) { elements.saveOrUpdate(user) }
+    override fun save(user: SolutionUser) { elements.saveOrUpdate(user) }
 
-    override fun findBySealed(userId: UserId): RepositoryResult<User> = Success(elements.first { it.id == userId })
+    override fun findBySealed(userId: UserId): RepositoryResult<SolutionUser> = Success(elements.first { it.id == userId })
 
     override fun existBySealed(email: Email): RepositoryResult<Boolean> = Success(elements.any { it.email == email })
 
     override fun existBySealed(userId: UserId): RepositoryResult<Boolean> = Success(elements.any { it.id == userId })
 
-    override fun saveSealed(user: User): RepositoryResult<User> {
+    override fun saveSealed(user: SolutionUser): RepositoryResult<SolutionUser> {
         elements.saveOrUpdate(user)
         return Success(user)
     }
 
-    override fun find(criteria: FindUserCriteria): Either<Throwable, User> = catch {
+    override fun find(criteria: FindUserCriteria): Either<Throwable, SolutionUser> = catch {
         when(criteria) {
-            is FindUserCriteria.ById -> elements.first { it.id == criteria.id }
+            is FindById -> elements.first { it.id == criteria.id }
         }
     }
 
@@ -48,7 +49,7 @@ object FakeUserRepository : UserRepository, FakeRepository<User> {
         }
     }
 
-    override fun eitherSave(user: User): Either<Throwable, Unit> = catch {
+    override fun eitherSave(user: SolutionUser): Either<Throwable, Unit> = catch {
         elements.saveOrUpdate(user)
     }
 }

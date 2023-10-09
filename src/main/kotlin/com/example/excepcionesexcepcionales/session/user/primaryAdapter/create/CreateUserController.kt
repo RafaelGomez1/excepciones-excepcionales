@@ -8,10 +8,8 @@ import com.example.excepcionesexcepcionales.solution.user.domain.Email.InvalidEm
 import com.example.excepcionesexcepcionales.solution.user.domain.Name.InvalidNameException
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber.InvalidPhoneNumberException
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname.InvalidSurnameException
-import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
-import java.time.ZonedDateTime
-import java.util.UUID
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.CREATED

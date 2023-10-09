@@ -1,11 +1,11 @@
-package com.example.excepcionesexcepcionales.solution.user.mothers
+package com.example.excepcionesexcepcionales.session.user.create.mothers
 
+import com.example.excepcionesexcepcionales.session.user.domain.User
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommand
-import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 
 object ImperativeCreateUserCommandMother {
 
-    fun fromUser(user: SolutionUser = UserMother.random()) =
+    fun fromUser(user: User = UserMother.random()) =
         with(user){
             ImperativeCreateUserCommand(
                 id = user.id.value,

@@ -3,10 +3,10 @@ package com.example.excepcionesexcepcionales.solution.user.application.verify.im
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.application.find.UserFinder
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 
 class ImperativeUserVerifier(
-    private val repository: UserRepository,
+    private val repository: SolutionUserRepository,
     private val publisher: DomainEventPublisher
 ) {
     private val finder = UserFinder(repository)

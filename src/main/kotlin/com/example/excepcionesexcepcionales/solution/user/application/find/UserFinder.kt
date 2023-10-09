@@ -1,12 +1,12 @@
 package com.example.excepcionesexcepcionales.solution.user.application.find
 
-import com.example.excepcionesexcepcionales.solution.user.domain.User
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 
-class UserFinder(private val repository: UserRepository) {
+class UserFinder(private val repository: SolutionUserRepository) {
 
-    fun invoke(id: UserId): User =
+    fun invoke(id: UserId): SolutionUser =
         if (!repository.existBy(id)) throw UserDoesNotExistException()
         else repository.findBy(id)
 }

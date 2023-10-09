@@ -1,14 +1,14 @@
 package com.example.excepcionesexcepcionales.session.user.application.create
 
+import com.example.excepcionesexcepcionales.session.user.domain.UserRepository
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
-import com.example.excepcionesexcepcionales.solution.user.domain.Email
-import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
-import com.example.excepcionesexcepcionales.solution.user.domain.Name
-import com.example.excepcionesexcepcionales.solution.user.domain.Surname
-import com.example.excepcionesexcepcionales.solution.user.domain.User
-import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlreadyExistsException
-import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.session.user.domain.Email
+import com.example.excepcionesexcepcionales.session.user.domain.PhoneNumber
+import com.example.excepcionesexcepcionales.session.user.domain.Name
+import com.example.excepcionesexcepcionales.session.user.domain.Surname
+import com.example.excepcionesexcepcionales.session.user.domain.User
+import com.example.excepcionesexcepcionales.session.user.domain.User.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.session.user.domain.UserId
 import java.time.ZonedDateTime
 
 class UserCreator(

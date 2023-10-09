@@ -1,14 +1,14 @@
-package com.example.excepcionesexcepcionales.solution.user.domain
+package com.example.excepcionesexcepcionales.session.user.domain
 
 import com.example.excepcionesexcepcionales.shared.event.Aggregate
 import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserCreatedEvent
 import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserEmailChangedEvent
 import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserVerifiedEvent
-import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus.CONFIRMED
-import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus.PENDING
-import com.example.excepcionesexcepcionales.solution.user.domain.Status.INCOMPLETE
-import com.example.excepcionesexcepcionales.solution.user.domain.Status.PENDING_VERIFICATION
-import com.example.excepcionesexcepcionales.solution.user.domain.Status.VERIFIED
+import com.example.excepcionesexcepcionales.session.user.domain.CardStatus.CONFIRMED
+import com.example.excepcionesexcepcionales.session.user.domain.CardStatus.PENDING
+import com.example.excepcionesexcepcionales.session.user.domain.Status.INCOMPLETE
+import com.example.excepcionesexcepcionales.session.user.domain.Status.PENDING_VERIFICATION
+import com.example.excepcionesexcepcionales.session.user.domain.Status.VERIFIED
 import java.time.ZonedDateTime
 
 data class User(

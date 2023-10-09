@@ -5,14 +5,12 @@ import com.example.excepcionesexcepcionales.session.user.primaryAdapter.create.C
 import com.example.excepcionesexcepcionales.session.user.primaryAdapter.create.CreateUserController.CreateUserControllerExceptionHandler
 import com.example.excepcionesexcepcionales.shared.clock.Clock
 import com.example.excepcionesexcepcionales.shared.id.IdGenerator
-import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.domain.Email.InvalidEmailException
 import com.example.excepcionesexcepcionales.solution.user.domain.Name.InvalidNameException
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber.InvalidPhoneNumberException
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname.InvalidSurnameException
-import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.mothers.CreateUserCommandMother
-import com.example.excepcionesexcepcionales.solution.user.mothers.ImperativeCreateUserCommandMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
 import java.util.stream.Stream
 import org.junit.jupiter.api.Test

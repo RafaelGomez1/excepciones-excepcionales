@@ -1,18 +1,18 @@
-package com.example.excepcionesexcepcionales.solution.user.mothers
+package com.example.excepcionesexcepcionales.session.user.create.mothers
 
+import com.example.excepcionesexcepcionales.session.user.domain.User
 import com.example.excepcionesexcepcionales.shared.clock.UTCClock
-import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus
-import com.example.excepcionesexcepcionales.solution.user.domain.Document
-import com.example.excepcionesexcepcionales.solution.user.domain.DocumentStatus
-import com.example.excepcionesexcepcionales.solution.user.domain.DocumentType
-import com.example.excepcionesexcepcionales.solution.user.domain.Email
-import com.example.excepcionesexcepcionales.solution.user.domain.Name
-import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
-import com.example.excepcionesexcepcionales.solution.user.domain.Status
-import com.example.excepcionesexcepcionales.solution.user.domain.Surname
-import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
-import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.Version
+import com.example.excepcionesexcepcionales.session.user.domain.CardStatus
+import com.example.excepcionesexcepcionales.session.user.domain.Document
+import com.example.excepcionesexcepcionales.session.user.domain.DocumentStatus
+import com.example.excepcionesexcepcionales.session.user.domain.DocumentType
+import com.example.excepcionesexcepcionales.session.user.domain.Email
+import com.example.excepcionesexcepcionales.session.user.domain.Name
+import com.example.excepcionesexcepcionales.session.user.domain.PhoneNumber
+import com.example.excepcionesexcepcionales.session.user.domain.Status
+import com.example.excepcionesexcepcionales.session.user.domain.Surname
+import com.example.excepcionesexcepcionales.session.user.domain.UserId
+import com.example.excepcionesexcepcionales.session.user.domain.Version
 import java.time.ZonedDateTime
 
 object UserMother {
@@ -26,8 +26,8 @@ object UserMother {
         documents: Set<Document> = setOf(DocumentMother.createValidDocument()),
         status: Status = Status.values().random(),
         cardStatus: CardStatus = CardStatus.values().random()
-    ): SolutionUser {
-        return SolutionUser(
+    ): User =
+        User(
             id = id,
             email = email,
             phoneNumber = phoneNumber,
@@ -38,15 +38,15 @@ object UserMother {
             status = status,
             cardStatus = cardStatus
         )
-    }
 
-    fun incomplete(): SolutionUser =
+    fun incomplete(): User =
         random(
             documents = emptySet(),
             cardStatus = CardStatus.PENDING,
             status = Status.INCOMPLETE
         )
 }
+
 object DocumentMother {
     fun createValidDocument(): Document {
         return Document(

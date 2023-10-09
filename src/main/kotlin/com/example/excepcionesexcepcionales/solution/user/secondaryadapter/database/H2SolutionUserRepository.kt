@@ -10,14 +10,14 @@ import com.example.excepcionesexcepcionales.solution.user.domain.FindUserCriteri
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Success
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Unknown
-import com.example.excepcionesexcepcionales.solution.user.domain.User
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 import org.springframework.stereotype.Component
 
 @Component
-class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepository {
-    override fun findBy(userId: UserId): User {
+class H2SolutionUserRepository(private val jpaRepository: JpaUserRepository) : SolutionUserRepository {
+    override fun findBy(userId: UserId): SolutionUser {
         TODO("Not yet implemented")
     }
 
@@ -27,9 +27,9 @@ class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepos
 
     override fun existBy(email: Email): Boolean = jpaRepository.existsByEmailIgnoreCase(email.value)
 
-    override fun save(user: User) { jpaRepository.save(user.toJpa()) }
+    override fun save(user: SolutionUser) { jpaRepository.save(user.toJpa()) }
 
-    override fun findBySealed(userId: UserId): RepositoryResult<User> {
+    override fun findBySealed(userId: UserId): RepositoryResult<SolutionUser> {
         TODO("Not yet implemented")
     }
 
@@ -43,12 +43,12 @@ class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepos
             .map { result -> Success(result) }
             .getOrElse { error -> Unknown(error) }
 
-    override fun saveSealed(user: User): RepositoryResult<User> =
+    override fun saveSealed(user: SolutionUser): RepositoryResult<SolutionUser> =
         runCatching { jpaRepository.save(user.toJpa()) }
             .map { Success(user) }
             .getOrElse { error -> Unknown(error) }
 
-    override fun find(criteria: FindUserCriteria): Either<Throwable, User> {
+    override fun find(criteria: FindUserCriteria): Either<Throwable, SolutionUser> {
         TODO("Not yet implemented")
     }
 
@@ -59,5 +59,5 @@ class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepos
         }
     }
 
-    override fun eitherSave(user: User): Either<Throwable, Unit> = catch { jpaRepository.save(user.toJpa()) }
+    override fun eitherSave(user: SolutionUser): Either<Throwable, Unit> = catch { jpaRepository.save(user.toJpa()) }
 }

@@ -1,11 +1,11 @@
-package com.example.excepcionesexcepcionales.solution.user.mothers
+package com.example.excepcionesexcepcionales.session.user.create.mothers
 
-import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
+import com.example.excepcionesexcepcionales.session.user.domain.User
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
 
 object CreateUserRequestBodyMother {
 
-    fun fromUser(user: SolutionUser) =
+    fun fromUser(user: User) =
         with(user) {
             CreateUserRequestBody(
                 email = email.value,

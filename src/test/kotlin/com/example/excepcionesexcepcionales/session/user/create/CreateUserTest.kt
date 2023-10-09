@@ -1,12 +1,12 @@
 package com.example.excepcionesexcepcionales.session.user.create
 
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommandHandler
-import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.session.user.create.fakes.FakeUserRepository
+import com.example.excepcionesexcepcionales.session.user.domain.User.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
-import com.example.excepcionesexcepcionales.solution.user.fakes.FakeUserRepository
-import com.example.excepcionesexcepcionales.solution.user.mothers.CreateUserCommandMother
-import com.example.excepcionesexcepcionales.solution.user.mothers.UserCreatedEventMother
-import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
+import com.example.excepcionesexcepcionales.session.user.create.mothers.CreateUserCommandMother
+import com.example.excepcionesexcepcionales.session.user.create.mothers.UserCreatedEventMother
+import com.example.excepcionesexcepcionales.session.user.create.mothers.UserMother
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

@@ -5,14 +5,14 @@ import com.example.excepcionesexcepcionales.solution.user.domain.Email
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.solution.user.domain.Name
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname
-import com.example.excepcionesexcepcionales.solution.user.domain.User
-import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 import java.time.ZonedDateTime
 
 class ImperativeUserCreator(
-    private val repository: UserRepository,
+    private val repository: SolutionUserRepository,
     private val publisher: DomainEventPublisher
 ) {
 
@@ -26,7 +26,7 @@ class ImperativeUserCreator(
     ) {
         guardUserExists(email)
 
-        val user = User.create(id, email, phoneNumber, createdOn, name, surname)
+        val user = SolutionUser.create(id, email, phoneNumber, createdOn, name, surname)
 
         repository.save(user)
         publisher.publish(user.pullEvents())

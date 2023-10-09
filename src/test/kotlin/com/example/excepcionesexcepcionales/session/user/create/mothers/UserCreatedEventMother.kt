@@ -1,11 +1,12 @@
-package com.example.excepcionesexcepcionales.solution.user.mothers
+package com.example.excepcionesexcepcionales.session.user.create.mothers
 
+import com.example.excepcionesexcepcionales.session.user.domain.User
 import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserCreatedEvent
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 
 object UserCreatedEventMother {
 
-    fun fromUser(user: SolutionUser) =
+    fun fromUser(user: User) =
         with(user) {
             UserCreatedEvent(
                 id = id.value.toString(),

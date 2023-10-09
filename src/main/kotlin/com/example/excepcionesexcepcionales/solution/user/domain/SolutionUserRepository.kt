@@ -2,44 +2,44 @@ package com.example.excepcionesexcepcionales.solution.user.domain
 
 import arrow.core.Either
 
-interface UserRepository {
-    fun findBy(userId: UserId): User
+interface SolutionUserRepository {
+    fun findBy(userId: UserId): SolutionUser
     fun existBy(userId: UserId): Boolean
     fun existBy(email: Email): Boolean
-    fun save(user: User)
+    fun save(user: SolutionUser)
 
     // Sealed Version
-    fun findBySealed(userId: UserId): RepositoryResult<User>
+    fun findBySealed(userId: UserId): RepositoryResult<SolutionUser>
     fun existBySealed(email: Email): RepositoryResult<Boolean>
     fun existBySealed(userId: UserId): RepositoryResult<Boolean>
-    fun saveSealed(user: User): RepositoryResult<User>
+    fun saveSealed(user: SolutionUser): RepositoryResult<SolutionUser>
 
     // Functional Version
-    fun find(criteria: FindUserCriteria): Either<Throwable, User>
+    fun find(criteria: FindUserCriteria): Either<Throwable, SolutionUser>
     fun exists(criteria: ExistsUserCriteria): Either<Throwable, Boolean>
-    fun eitherSave(user: User): Either<Throwable, Unit>
+    fun eitherSave(user: SolutionUser): Either<Throwable, Unit>
 }
 
-fun <Error> UserRepository.saveOrElse(
-    user: User,
+fun <Error> SolutionUserRepository.saveOrElse(
+    user: SolutionUser,
     onError: (Throwable) -> Error
-): Either<Error, User> =
+): Either<Error, SolutionUser> =
     eitherSave(user)
         .mapLeft{ error -> onError(error) }
         .map { user }
 
-fun <Error> UserRepository.findOrElse(
+fun <Error> SolutionUserRepository.findOrElse(
     criteria: FindUserCriteria,
     onNotFound: () -> Error,
     onError: (Throwable) -> Error,
-): Either<Error, User> =
+): Either<Error, SolutionUser> =
     find(criteria)
         .mapLeft{ error ->
             if (error is NoSuchElementException) onNotFound()
             else onError(error)
         }
 
-fun <Error> UserRepository.existsOrElse(
+fun <Error> SolutionUserRepository.existsOrElse(
     criteria: ExistsUserCriteria,
     onError: (Throwable) -> Error
 ): Either<Error, Boolean> =

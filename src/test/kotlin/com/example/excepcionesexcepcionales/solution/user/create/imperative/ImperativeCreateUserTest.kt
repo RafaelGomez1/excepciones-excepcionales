@@ -1,14 +1,9 @@
 package com.example.excepcionesexcepcionales.solution.user.create.imperative
 
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommandHandler
-import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus
-import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus.PENDING
-import com.example.excepcionesexcepcionales.solution.user.domain.Status
-import com.example.excepcionesexcepcionales.solution.user.domain.Status.INCOMPLETE
-import com.example.excepcionesexcepcionales.solution.user.domain.User
-import com.example.excepcionesexcepcionales.solution.user.domain.User.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
-import com.example.excepcionesexcepcionales.solution.user.fakes.FakeUserRepository
+import com.example.excepcionesexcepcionales.solution.user.fakes.FakeSolutionUserRepository
 import com.example.excepcionesexcepcionales.solution.user.mothers.ImperativeCreateUserCommandMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserCreatedEventMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
@@ -20,7 +15,7 @@ import org.junit.jupiter.api.assertThrows
 
 class ImperativeCreateUserTest {
 
-    private val repository = FakeUserRepository
+    private val repository = FakeSolutionUserRepository
     private val publisher = FakeDomainEventPublisher
     private val handler = ImperativeCreateUserCommandHandler(repository, publisher)
 

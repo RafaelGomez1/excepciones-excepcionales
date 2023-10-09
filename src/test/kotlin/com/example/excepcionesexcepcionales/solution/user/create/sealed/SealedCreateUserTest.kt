@@ -4,12 +4,11 @@ import com.example.excepcionesexcepcionales.solution.user.application.create.sea
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeClock
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeIdGenerator
-import com.example.excepcionesexcepcionales.solution.user.fakes.FakeUserRepository
+import com.example.excepcionesexcepcionales.solution.user.fakes.FakeSolutionUserRepository
 import com.example.excepcionesexcepcionales.solution.user.mothers.CreateUserRequestBodyMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserCreatedEventMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
-import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_EMAIL
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_NAME
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_PHONE_NUMBER
@@ -32,7 +31,7 @@ import org.springframework.http.HttpStatus.CREATED
 
 class SealedCreateUserTest {
 
-    private val repository = FakeUserRepository
+    private val repository = FakeSolutionUserRepository
     private val publisher = FakeDomainEventPublisher
     private val idGenerator = FakeIdGenerator
     private val clock = FakeClock
