@@ -38,7 +38,6 @@ data class User(
             .also { it.pushEvent(it.toUserCreatedEvent(id, email, phoneNumber, name, surname, createdOn, status, cardStatus))}
     }
 
-
     fun changeEmail(newEmail: Email): User {
         if(email == newEmail)
             throw CannotChangeEmailToTheSameValueException()

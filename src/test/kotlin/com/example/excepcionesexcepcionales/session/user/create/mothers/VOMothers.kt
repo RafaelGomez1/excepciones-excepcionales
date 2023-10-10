@@ -1,5 +1,6 @@
 package com.example.excepcionesexcepcionales.session.user.create.mothers
 
+import com.example.excepcionesexcepcionales.faker.Fake
 import com.example.excepcionesexcepcionales.session.user.domain.Email
 import com.example.excepcionesexcepcionales.session.user.domain.Name
 import com.example.excepcionesexcepcionales.session.user.domain.PhoneNumber
@@ -12,11 +13,11 @@ object UserIdMother {
 }
 
 object NameMother {
-    fun random(value: String = "RandomName") = Name.create(value)
+    fun random(value: String = Fake.faker.name.firstName()) = Name.create(value)
 }
 
 object SurnameMother {
-    fun random(value: String = "RandomSurname") = Surname.create(value)
+    fun random(value: String = Fake.faker.name.lastName()) = Surname.create(value)
 }
 
 object EmailMother {

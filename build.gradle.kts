@@ -42,6 +42,9 @@ dependencies {
 	testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 	testImplementation("org.mockito:mockito-core:4.0.0")
 	testImplementation("org.mockito:mockito-inline:4.0.0")
+
+	// Faker
+	testImplementation("io.github.serpro69:kotlin-faker:1.8.0")
 }
 
 tasks.withType<KotlinCompile> {
