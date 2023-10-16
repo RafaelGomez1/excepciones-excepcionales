@@ -1,6 +1,7 @@
 package com.example.excepcionesexcepcionales.session.user.create.mothers
 
 import com.example.excepcionesexcepcionales.session.user.domain.User
+import com.example.excepcionesexcepcionales.session.user.mothers.UserMother
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommand
 
 object ImperativeCreateUserCommandMother {

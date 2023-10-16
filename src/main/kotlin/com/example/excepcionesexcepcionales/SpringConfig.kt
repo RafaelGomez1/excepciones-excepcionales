@@ -1,6 +1,7 @@
 package com.example.excepcionesexcepcionales
 
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommandHandler
+import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserCommandHandler
 import com.example.excepcionesexcepcionales.session.user.domain.UserRepository
 import com.example.excepcionesexcepcionales.shared.clock.Clock
 import com.example.excepcionesexcepcionales.shared.clock.UTCClock
@@ -27,6 +28,13 @@ class SpringConfig {
         repository: UserRepository,
         publisher: DomainEventPublisher
     ): CreateUserCommandHandler = CreateUserCommandHandler(repository, publisher)
+
+    @Bean
+    fun verifyUserCommandHandler(
+        repository: UserRepository,
+        publisher: DomainEventPublisher
+    ): VerifyUserCommandHandler = VerifyUserCommandHandler(repository, publisher)
+
 
     @Bean
     fun functionalCreateUserCommandHandler(

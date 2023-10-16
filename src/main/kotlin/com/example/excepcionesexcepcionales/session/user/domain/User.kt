@@ -38,14 +38,6 @@ data class User(
             .also { it.pushEvent(it.toUserCreatedEvent(id, email, phoneNumber, name, surname, createdOn, status, cardStatus))}
     }
 
-    fun changeEmail(newEmail: Email): User {
-        if(email == newEmail)
-            throw CannotChangeEmailToTheSameValueException()
-
-        return copy(email = newEmail)
-            .also { it.pushEvent(UserEmailChangedEvent(id.toString(), email.toString())) }
-    }
-
     fun verify(): User {
         guardAllDocumentsAreVerified()
         guardStatusCanBeVerified()
@@ -56,7 +48,7 @@ data class User(
     }
 
     private fun guardAllDocumentsAreVerified() =
-        if(documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit
+        if (documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit
         else throw NotAllDocumentVerifiedException()
 
     private fun guardStatusCanBeVerified() {

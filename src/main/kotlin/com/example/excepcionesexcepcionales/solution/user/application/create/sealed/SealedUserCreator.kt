@@ -1,7 +1,7 @@
 package com.example.excepcionesexcepcionales.solution.user.application.create.sealed
 
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
-import com.example.excepcionesexcepcionales.shared.event.publishOrElse
+import com.example.excepcionesexcepcionales.shared.event.safePublish
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.CreateUserResult.Success
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.CreateUserResult.Unknown
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.CreateUserResult.UserAlreadyExists
@@ -9,15 +9,15 @@ import com.example.excepcionesexcepcionales.solution.user.domain.Email
 import com.example.excepcionesexcepcionales.solution.user.domain.Name
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult
-import com.example.excepcionesexcepcionales.solution.user.domain.Surname
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
-import com.example.excepcionesexcepcionales.solution.user.domain.UserId
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.Surname
+import com.example.excepcionesexcepcionales.solution.user.domain.UserId
 import java.time.ZonedDateTime
-import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Success as RepoSuccess
-import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Unknown as RepoUnknown
 import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Success as PubSuccess
 import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Unknown as PubUnknown
+import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Success as RepoSuccess
+import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Unknown as RepoUnknown
 
 class SealedUserCreator(
     private val repository: SolutionUserRepository,
@@ -64,7 +64,7 @@ class SealedUserCreator(
 
     private fun CreateUserResult.publishEvent(): CreateUserResult =
         if(this is Success)
-            when(val result = publisher.publishOrElse(user.pullEvents())) {
+            when(val result = publisher.safePublish(user.pullEvents())) {
                 is PubSuccess -> Success(user)
                 is PubUnknown -> Unknown(result.error)
             }

@@ -1,4 +1,4 @@
-package com.example.excepcionesexcepcionales.session.user.create.mothers
+package com.example.excepcionesexcepcionales.session.user.mothers
 
 import com.example.excepcionesexcepcionales.session.user.domain.User
 import com.example.excepcionesexcepcionales.shared.clock.UTCClock

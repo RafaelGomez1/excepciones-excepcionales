@@ -17,7 +17,7 @@ fun <Error> DomainEventPublisher.publishOrElse(
     catch { publish(events) }
         .mapLeft{ error -> onError(error) }
 
-fun DomainEventPublisher.publishOrElse(events: List<DomainEvent>): PublisherResult =
+fun DomainEventPublisher.safePublish(events: List<DomainEvent>): PublisherResult =
     runCatching { publish(events) }
         .map { Success }
         .getOrElse { error -> Unknown(error) }

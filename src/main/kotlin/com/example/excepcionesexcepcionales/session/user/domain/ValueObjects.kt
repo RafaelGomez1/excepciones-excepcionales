@@ -1,16 +1,14 @@
 package com.example.excepcionesexcepcionales.session.user.domain
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
-import com.example.excepcionesexcepcionales.shared.validation.Validation
-import com.example.excepcionesexcepcionales.shared.validation.Validation.Failure
-import com.example.excepcionesexcepcionales.shared.validation.Validation.Success
 import java.util.UUID
 
 @JvmInline
 value class UserId(val value: UUID) {
     override fun toString(): String = value.toString()
+
+    companion object {
+        fun fromString(id: String) = UserId(UUID.fromString(id))
+    }
 }
 
 @JvmInline
@@ -38,12 +36,12 @@ value class Surname private constructor(val value: String) {
 
     companion object {
         private fun isNotValid(value: String) = value.isBlank() || value.length > 80
-
         fun create(value: String): Surname = Surname(value)
     }
 }
 
 data class Email private constructor(val value: String) {
+
     init {
         if (!regex.matches(value)) throw InvalidEmailException(value)
     }
@@ -60,6 +58,7 @@ data class Email private constructor(val value: String) {
 }
 
 data class PhoneNumber private constructor(private val number: String, private val prefix: String) {
+
     init {
         validate(prefix + number)
     }
