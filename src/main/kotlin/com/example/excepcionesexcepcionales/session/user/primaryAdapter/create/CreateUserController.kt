@@ -2,23 +2,13 @@ package com.example.excepcionesexcepcionales.session.user.primaryAdapter.create
 
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommand
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommandHandler
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult.InvalidEmail
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult.InvalidName
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult.InvalidPhoneNumber
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult.InvalidSurname
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult.Success
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult.Unknown
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserResult.UserAlreadyExists
 import com.example.excepcionesexcepcionales.shared.clock.Clock
-import com.example.excepcionesexcepcionales.shared.error.Response
-import com.example.excepcionesexcepcionales.shared.error.withoutBody
 import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import com.example.excepcionesexcepcionales.solution.user.domain.Email.InvalidEmailException
 import com.example.excepcionesexcepcionales.solution.user.domain.Name.InvalidNameException
 import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber.InvalidPhoneNumberException
-import com.example.excepcionesexcepcionales.solution.user.domain.Surname.InvalidSurnameException
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
+import com.example.excepcionesexcepcionales.solution.user.domain.Surname.InvalidSurnameException
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_EMAIL
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_NAME
@@ -89,7 +79,7 @@ class CreateUserController(
 //            InvalidName -> Response.badRequest().body(INVALID_NAME)
 //            InvalidPhoneNumber -> Response.badRequest().body(INVALID_PHONE_NUMBER)
 //            InvalidSurname -> Response.badRequest().body(INVALID_SURNAME)
-//            UserAlreadyExists -> Response.status(CONFLICT).body(INVALID_SURNAME)
+//            UserAlreadyExists -> Response.status(CONFLICT).body(USER_ALREADY_EXISTS)
 //            is Success -> Response.status(CREATED).withoutBody()
 //            is Unknown -> throw reason
 //        }

@@ -57,7 +57,7 @@ class UserCreator(
 //): CreateUserResult =
 //    when(this) {
 //        is RepositoryResult.Success ->
-//            if (value) UserAlreadyExist
+//            if (value) UserAlreadyExists
 //            else Success(User.create(id, email, phoneNumber, createdOn, name, surname))
 //        is RepositoryResult.Unknown -> Unknown(error)
 //    }
