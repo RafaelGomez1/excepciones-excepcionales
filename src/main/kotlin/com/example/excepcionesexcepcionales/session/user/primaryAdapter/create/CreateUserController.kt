@@ -10,6 +10,11 @@ import com.example.excepcionesexcepcionales.solution.user.domain.PhoneNumber.Inv
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname.InvalidSurnameException
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_EMAIL
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_NAME
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_PHONE_NUMBER
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_SURNAME
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_EXISTS
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.CREATED
@@ -48,22 +53,22 @@ class CreateUserController(
     class CreateUserControllerExceptionHandler {
         @ExceptionHandler(value = [UserAlreadyExistsException::class])
         @ResponseStatus(CONFLICT)
-        fun userAlreadyExists(e: UserAlreadyExistsException) = "User already exists"
+        fun userAlreadyExists(e: UserAlreadyExistsException) = USER_ALREADY_EXISTS
 
         @ExceptionHandler(value = [InvalidNameException::class])
         @ResponseStatus(BAD_REQUEST)
-        fun invalidName(e: InvalidNameException) = "Name is blank or over 50 characters"
+        fun invalidName(e: InvalidNameException) = INVALID_NAME
 
         @ExceptionHandler(value = [InvalidSurnameException::class])
         @ResponseStatus(BAD_REQUEST)
-        fun handleNotFound(e: InvalidSurnameException) = "Surname is blank or over 80 characters"
+        fun handleNotFound(e: InvalidSurnameException) = INVALID_SURNAME
 
         @ExceptionHandler(value = [InvalidEmailException::class])
         @ResponseStatus(BAD_REQUEST)
-        fun handleNotFound(e: InvalidEmailException) = "Provided email is not valid"
+        fun handleNotFound(e: InvalidEmailException) = INVALID_EMAIL
 
         @ExceptionHandler(value = [InvalidPhoneNumberException::class])
         @ResponseStatus(BAD_REQUEST)
-        fun handleNotFound(e: InvalidPhoneNumberException) = "Phone Number is not valid"
+        fun handleNotFound(e: InvalidPhoneNumberException) = INVALID_PHONE_NUMBER
     }
 }

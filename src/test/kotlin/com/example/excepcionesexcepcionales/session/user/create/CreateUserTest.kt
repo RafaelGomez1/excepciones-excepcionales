@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.provider.Arguments
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.BAD_REQUEST
 
 class CreateUserTest {
 
@@ -45,6 +46,10 @@ class CreateUserTest {
 
     @Test
     fun `should create user and publish event`() {
+        // Given
+        idGenerator.shouldGenerate(user.id.value)
+        clock.shouldGenerate(user.createdOn)
+
         // When
         handler.handle(command)
 
@@ -56,6 +61,8 @@ class CreateUserTest {
     @Test
     fun `should throw exception if user already exists`() {
         // Given
+        idGenerator.shouldGenerate(user.id.value)
+        clock.shouldGenerate(user.createdOn)
         `user already exists`()
 
         // When
@@ -104,27 +111,27 @@ class CreateUserTest {
         fun validationErrors() = Stream.of(
             Arguments.of(
                 body.copy(email = "abe"),
-                HttpStatus.BAD_REQUEST,
+                BAD_REQUEST,
                 INVALID_EMAIL
             ),
             Arguments.of(
                 body.copy(phoneNumber = "+3a1"),
-                HttpStatus.BAD_REQUEST,
+                BAD_REQUEST,
                 INVALID_PHONE_NUMBER
             ),
             Arguments.of(
                 body.copy(phonePrefix = "1bd"),
-                HttpStatus.BAD_REQUEST,
+                BAD_REQUEST,
                 INVALID_PHONE_NUMBER
             ),
             Arguments.of(
                 body.copy(name = "    "),
-                HttpStatus.BAD_REQUEST,
+                BAD_REQUEST,
                 INVALID_NAME
             ),
             Arguments.of(
                 body.copy(surname = "123412341234123412341234123412341234123412341234123412341234123412341234123412341"),
-                HttpStatus.BAD_REQUEST,
+                BAD_REQUEST,
                 INVALID_SURNAME
             ),
         )
