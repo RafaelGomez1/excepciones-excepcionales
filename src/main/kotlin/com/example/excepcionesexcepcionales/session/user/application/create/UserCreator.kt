@@ -37,6 +37,16 @@ class UserCreator(
     }
 }
 
+//sealed class CreateUserResult {
+//    object InvalidName: CreateUserResult()
+//    object InvalidSurname: CreateUserResult()
+//    object InvalidEmail: CreateUserResult()
+//    object InvalidPhoneNumber: CreateUserResult()
+//    object UserAlreadyExists: CreateUserResult()
+//    data class Success(val user: User): CreateUserResult()
+//    class Unknown(val reason: Throwable): CreateUserResult()
+//}
+
 //private fun RepositoryResult<Boolean>.createUser(
 //    id: UserId,
 //    email: Email,
