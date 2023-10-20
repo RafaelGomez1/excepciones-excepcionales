@@ -17,7 +17,7 @@ object NameMother {
 }
 
 object SurnameMother {
-    fun random(value: String = Fake.faker.name.lastName()) = Surname.create(value)
+    fun random(value: String = Fake.faker.name.name()) = Surname.create(value)
 }
 
 object EmailMother {
