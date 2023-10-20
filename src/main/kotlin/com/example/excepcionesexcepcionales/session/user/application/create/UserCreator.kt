@@ -33,6 +33,6 @@ class UserCreator(
     }
 
     private fun guardUserExists(email: Email) {
-        if (repository.existBy(email)) throw UserAlreadyExistsException()
+        if (repository.existByEmail(email)) throw UserAlreadyExistsException()
     }
 }
