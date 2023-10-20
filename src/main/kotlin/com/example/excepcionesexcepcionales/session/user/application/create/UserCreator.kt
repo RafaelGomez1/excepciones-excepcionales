@@ -47,6 +47,10 @@ class UserCreator(
 //    class Unknown(val reason: Throwable): CreateUserResult()
 //}
 
+//fun CreateUserResult.onSuccess(block: (User) -> CreateUserResult) =
+//    if (this is CreateUserResult.Success) block(user)
+//    else this
+
 //private fun RepositoryResult<Boolean>.createUser(
 //    id: UserId,
 //    email: Email,

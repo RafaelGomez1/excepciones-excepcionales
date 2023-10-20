@@ -75,11 +75,11 @@ class CreateUserController(
 
 //    private fun CreateUserResult.toServerError(): Response<*> =
 //        when(this) {
-//            InvalidEmail -> Response.badRequest().body(INVALID_EMAIL)
-//            InvalidName -> Response.badRequest().body(INVALID_NAME)
-//            InvalidPhoneNumber -> Response.badRequest().body(INVALID_PHONE_NUMBER)
-//            InvalidSurname -> Response.badRequest().body(INVALID_SURNAME)
-//            UserAlreadyExists -> Response.status(CONFLICT).body(USER_ALREADY_EXISTS)
-//            is Success -> Response.status(CREATED).withoutBody()
-//            is Unknown -> throw reason
+//            CreateUserResult.InvalidEmail -> Response.badRequest().body(INVALID_EMAIL)
+//            CreateUserResult.InvalidName -> Response.badRequest().body(INVALID_NAME)
+//            CreateUserResult.InvalidPhoneNumber -> Response.badRequest().body(INVALID_PHONE_NUMBER)
+//            CreateUserResult.InvalidSurname -> Response.badRequest().body(INVALID_SURNAME)
+//            CreateUserResult.UserAlreadyExists -> Response.status(CONFLICT).body(USER_ALREADY_EXISTS)
+//            is CreateUserResult.Success -> Response.status(CREATED).withoutBody()
+//            is CreateUserResult.Unknown -> throw reason
 //        }
