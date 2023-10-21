@@ -15,7 +15,7 @@ class UserVerifier(
         val user = finder.invoke(id)
         val verifiedUser = user.verify()
 
-        repository.save(user)
+        repository.save(verifiedUser)
         publisher.publish(verifiedUser.pullEvents())
     }
 }
