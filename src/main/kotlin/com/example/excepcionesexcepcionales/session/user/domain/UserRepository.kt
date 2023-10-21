@@ -16,8 +16,8 @@ interface UserRepository {
 }
 
 sealed interface RepositoryResult<T> {
-    class Success<T>(val value: T): RepositoryResult<T>
-    class Unknown<T>(val error: Throwable): RepositoryResult<T>
+    class RepoSuccess<T>(val value: T): RepositoryResult<T>
+    class RepoUnknown<T>(val error: Throwable): RepositoryResult<T>
 }
 
 sealed interface ExistsUserCriteria {

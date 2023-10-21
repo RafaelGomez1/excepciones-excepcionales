@@ -24,7 +24,7 @@ class UserCreator(
         name: Name,
         surname: Surname
     ) {
-        guardUserExists(email)
+        guardUserDoesNotExists(email)
 
         val user = User.create(id, email, phoneNumber, createdOn, name, surname)
 
@@ -32,7 +32,7 @@ class UserCreator(
         publisher.publish(user.pullEvents())
     }
 
-    private fun guardUserExists(email: Email) {
+    private fun guardUserDoesNotExists(email: Email) {
         if (repository.existByEmail(email)) throw UserAlreadyExistsException()
     }
 }
@@ -60,24 +60,24 @@ class UserCreator(
 //    surname: Surname,
 //): CreateUserResult =
 //    when(this) {
-//        is RepositoryResult.Success ->
+//        is RepositoryResult.RepoSuccess ->
 //            if (value) UserAlreadyExists
 //            else Success(User.create(id, email, phoneNumber, createdOn, name, surname))
-//        is RepositoryResult.Unknown -> Unknown(error)
+//        is RepositoryResult.RepoUnknown -> Unknown(error)
 //    }
 //
 //private fun CreateUserResult.save() =
 //    if (this is Success)
 //        when(val result = repository.saveSealed(user)) {
-//            is RepositoryResult.Success -> Success(user)
-//            is RepositoryResult.Unknown -> Unknown(result.error)
+//            is RepositoryResult.RepoSuccess -> Success(user)
+//            is RepositoryResult.RepoUnknown -> Unknown(result.error)
 //        }
 //    else this
 //
 //private fun CreateUserResult.publish() =
 //    if (this is Success)
 //        when(val result = publisher.safePublish(user.pullEvents())) {
-//            is PublisherResult.Success -> Success(user)
-//            is PublisherResult.Unknown -> Unknown(result.error)
+//            is PublisherResult.PubSuccess -> Success(user)
+//            is PublisherResult.PubUnknown -> Unknown(result.error)
 //        }
 //    else this

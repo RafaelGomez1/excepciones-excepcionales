@@ -10,8 +10,8 @@ import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriter
 import com.example.excepcionesexcepcionales.session.user.domain.Name
 import com.example.excepcionesexcepcionales.session.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult
-import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.Success
-import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.Unknown
+import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.RepoSuccess
+import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.RepoUnknown
 import com.example.excepcionesexcepcionales.session.user.domain.Status
 import com.example.excepcionesexcepcionales.session.user.domain.Surname
 import com.example.excepcionesexcepcionales.session.user.domain.User
@@ -19,7 +19,6 @@ import com.example.excepcionesexcepcionales.session.user.domain.UserId
 import com.example.excepcionesexcepcionales.session.user.domain.UserRepository
 import com.example.excepcionesexcepcionales.solution.user.secondaryadapter.database.JpaUser
 import com.example.excepcionesexcepcionales.solution.user.secondaryadapter.database.JpaUserRepository
-import com.example.excepcionesexcepcionales.solution.user.secondaryadapter.database.toJpa
 import org.springframework.stereotype.Component
 
 @Component
@@ -43,13 +42,13 @@ class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepos
                 is ById -> jpaRepository.existsById(criteria.id.value)
             }
         }
-            .map { result -> Success(result) }
-            .getOrElse { error -> Unknown(error) }
+            .map { result -> RepoSuccess(result) }
+            .getOrElse { error -> RepoUnknown(error) }
 
     override fun saveSealed(user: User): RepositoryResult<Unit> =
         runCatching { jpaRepository.save(user.toJpa()) }
-            .map { Success(Unit) }
-            .getOrElse { error -> Unknown(error) }
+            .map { RepoSuccess(Unit) }
+            .getOrElse { error -> RepoUnknown(error) }
 
     // Methods for the Either Section
     override fun existsEither(criteria: ExistsUserCriteria): Either<Throwable, Boolean> = catch {

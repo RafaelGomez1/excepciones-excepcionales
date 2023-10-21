@@ -14,8 +14,8 @@ import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRep
 import com.example.excepcionesexcepcionales.solution.user.domain.Surname
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
 import java.time.ZonedDateTime
-import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Success as PubSuccess
-import com.example.excepcionesexcepcionales.shared.event.PublisherResult.Unknown as PubUnknown
+import com.example.excepcionesexcepcionales.shared.event.PublisherResult.PubSuccess as PubSuccess
+import com.example.excepcionesexcepcionales.shared.event.PublisherResult.PubUnknown as PubUnknown
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Success as RepoSuccess
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Unknown as RepoUnknown
 

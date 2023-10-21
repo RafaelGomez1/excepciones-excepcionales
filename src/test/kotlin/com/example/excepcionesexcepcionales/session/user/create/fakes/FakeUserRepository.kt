@@ -7,12 +7,11 @@ import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriter
 import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria.ByEmail
 import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria.ById
 import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult
-import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.Success
-import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.Unknown
+import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.RepoSuccess
+import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult.RepoUnknown
 import com.example.excepcionesexcepcionales.session.user.domain.User
 import com.example.excepcionesexcepcionales.session.user.domain.UserId
 import com.example.excepcionesexcepcionales.session.user.domain.UserRepository
-import com.example.excepcionesexcepcionales.session.user.secondaryadapter.database.toJpa
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeRepository
 
 object FakeUserRepository : UserRepository, FakeRepository<User> {
@@ -33,13 +32,13 @@ object FakeUserRepository : UserRepository, FakeRepository<User> {
                 is ById -> elements.any { it.id == criteria.id }
             }
         }
-            .map { result -> Success(result) }
-            .getOrElse { error -> Unknown(error) }
+            .map { result -> RepoSuccess(result) }
+            .getOrElse { error -> RepoUnknown(error) }
 
     override fun saveSealed(user: User): RepositoryResult<Unit> =
         runCatching { elements.saveOrUpdate(user) }
-            .map { Success(Unit) }
-            .getOrElse { error -> Unknown(error) }
+            .map { RepoSuccess(Unit) }
+            .getOrElse { error -> RepoUnknown(error) }
 
     override fun existsEither(criteria: ExistsUserCriteria): Either<Throwable, Boolean> = catch {
         when (criteria) {
