@@ -8,7 +8,8 @@ refactor podremos ir de una gestión de errores completamente Imperativa a una g
 la programación funcional.
 
 
-## Refactor
+## Proceso de Refactorización
+Realizaremos dos refactors durante el transcurso del workshop.
 
 - El primer refactor consiste en modelar los resultados de una función utilizando técnicas como Railway Programming, Errors as Values y Sealed Classes.
-- El segundo refactor consiste en introducir la monad Either para permitirnos conseguir los mismos beneficios que ya teníamos con el primer refactor pero evitándonos todos esos problemas.
+- El segundo refactor consiste en iterar sobre lo anterior introducir la monad Either para permitirnos gestionar errores y combinar funciones de una manera mas simple obteniendo los mismos beneficios que el primero.
