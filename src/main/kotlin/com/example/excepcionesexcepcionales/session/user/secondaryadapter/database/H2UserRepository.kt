@@ -7,6 +7,7 @@ import com.example.excepcionesexcepcionales.session.user.domain.Email
 import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria
 import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria.ByEmail
 import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria.ById
+import com.example.excepcionesexcepcionales.session.user.domain.FindUserCriteria
 import com.example.excepcionesexcepcionales.session.user.domain.Name
 import com.example.excepcionesexcepcionales.session.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.session.user.domain.RepositoryResult
@@ -19,6 +20,7 @@ import com.example.excepcionesexcepcionales.session.user.domain.UserId
 import com.example.excepcionesexcepcionales.session.user.domain.UserRepository
 import com.example.excepcionesexcepcionales.solution.user.secondaryadapter.database.JpaUser
 import com.example.excepcionesexcepcionales.solution.user.secondaryadapter.database.JpaUserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
@@ -33,7 +35,13 @@ class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepos
     override fun existByEmail(email: Email): Boolean = jpaRepository.existsByEmailIgnoreCase(email.value)
 
     override fun save(user: User) { jpaRepository.save(user.toJpa()) }
-    
+
+    override fun find(criteria: FindUserCriteria): User? =
+        when(criteria) {
+            is FindUserCriteria.ById -> jpaRepository.findByIdOrNull(criteria.id.value)
+        }?.toDomain()
+
+
     // Methods for the Sealed Section
     override fun exists(criteria: ExistsUserCriteria): RepositoryResult<Boolean> =
         runCatching {

@@ -29,6 +29,11 @@ inline fun <E, R> Either<E, R>.toServerResponse(
     onError: (E) -> Response<*>
 ): Response<*> = fold({ onError(it) }, { onValidResponse(it) })
 
+inline fun <E, R> Either<E, R>.toServerResponse2(
+    onValidResponse: (R) -> Response<String>,
+    onError: (E) -> Response<String>
+): Response<String> = fold({ onError(it) }, { onValidResponse(it) })
+
 fun ResponseEntity.BodyBuilder.withoutBody(): Response<*> = body(null)
 
 typealias Response<T> = ResponseEntity<T>

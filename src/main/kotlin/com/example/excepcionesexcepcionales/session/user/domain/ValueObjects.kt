@@ -2,6 +2,8 @@ package com.example.excepcionesexcepcionales.session.user.domain
 
 import arrow.core.Either
 import arrow.core.left
+import arrow.core.raise.either
+import arrow.core.raise.ensure
 import arrow.core.right
 import com.example.excepcionesexcepcionales.shared.validation.Validation
 import com.example.excepcionesexcepcionales.shared.validation.Validation.Failure
@@ -37,6 +39,11 @@ value class Name private constructor(val value: String) {
         fun <Error> createOrElse(value: String, onError: () -> Error): Either<Error, Name> =
             if(isNotValid(value)) onError().left()
             else Name(value).right()
+
+        fun <Error> createOrElseV2(value: String, onError: () -> Error): Either<Error, Name> = either {
+            ensure(!isNotValid(value)) { onError() }
+            Name(value)
+        }
     }
 }
 

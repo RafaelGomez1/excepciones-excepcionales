@@ -11,19 +11,27 @@ import com.example.excepcionesexcepcionales.session.user.primaryAdapter.create.C
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeClock
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeIdGenerator
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_EMAIL
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_NAME
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_PHONE_NUMBER
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_SURNAME
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_EXISTS
 import java.util.stream.Stream
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import org.mockito.kotlin.stub
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.CONFLICT
 
 class CreateUserTest {
 
@@ -51,43 +59,46 @@ class CreateUserTest {
         clock.shouldGenerate(user.createdOn)
 
         // When
-        handler.handle(command)
+        val result = controller.create(body)
 
         // Then
+
+        assertEquals(HttpStatus.CREATED, result.statusCode)
+        assertEquals(null, result.body)
         assertTrue { repository.wasPersisted(user) }
         assertTrue { publisher.wasPublished(expectedEvent) }
     }
 
     @Test
-    fun `should throw exception if user already exists`() {
+    fun `should fail if user already exists`() {
         // Given
         idGenerator.shouldGenerate(user.id.value)
         clock.shouldGenerate(user.createdOn)
         `user already exists`()
 
         // When
-        assertThrows<UserAlreadyExistsException> {
-            handler.handle(command)
-        }
+        val result =controller.create(body)
 
         // Then
+        assertEquals(CONFLICT, result.statusCode)
+        assertEquals(USER_ALREADY_EXISTS, result.body)
         assertFalse { publisher.wasPublished(expectedEvent) }
     }
 
-//    @ParameterizedTest
-//    @MethodSource("validationErrors")
-//    fun `should return bad request if email is invalid`(body: CreateUserRequestBody, status: HttpStatus, error: String) {
-//        // Given
-//        `ids will be generated`()
-//        `clock works`()
-//
-//        // When
-//        val result = controller.create(body)
-//
-//        // Then
-//        assertEquals(status, result.statusCode)
-//        assertEquals(error, result.body)
-//    }
+    @ParameterizedTest
+    @MethodSource("validationErrors")
+    fun `should return bad request if email is invalid`(body: CreateUserRequestBody, status: HttpStatus, error: String) {
+        // Given
+        `ids will be generated`()
+        `clock works`()
+
+        // When
+        val result = controller.create(body)
+
+        // Then
+        assertEquals(status, result.statusCode)
+        assertEquals(error, result.body)
+    }
 
     private fun `user already exists`() {
         repository.save(user)

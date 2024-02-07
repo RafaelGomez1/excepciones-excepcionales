@@ -1,14 +1,23 @@
 package com.example.excepcionesexcepcionales.session.user.domain
 
-import com.example.excepcionesexcepcionales.shared.event.Aggregate
-import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserCreatedEvent
-import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserEmailChangedEvent
-import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserVerifiedEvent
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.raise.either
+import arrow.core.right
+import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError2
+import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError
+import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError.DomainError.CardStatusNotConfirmed
+import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError.DomainError.DocumentsNotVerified
+import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError.DomainError.UserAlreadyVerified
+import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError.DomainError.UserIsIncomplete
 import com.example.excepcionesexcepcionales.session.user.domain.CardStatus.CONFIRMED
 import com.example.excepcionesexcepcionales.session.user.domain.CardStatus.PENDING
 import com.example.excepcionesexcepcionales.session.user.domain.Status.INCOMPLETE
 import com.example.excepcionesexcepcionales.session.user.domain.Status.PENDING_VERIFICATION
 import com.example.excepcionesexcepcionales.session.user.domain.Status.VERIFIED
+import com.example.excepcionesexcepcionales.shared.event.Aggregate
+import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserCreatedEvent
+import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserVerifiedEvent
 import java.time.ZonedDateTime
 
 data class User(
@@ -38,33 +47,32 @@ data class User(
             .also { it.pushEvent(it.toUserCreatedEvent(id, email, phoneNumber, name, surname, createdOn, status, cardStatus))}
     }
 
-    fun verify(): User {
-        guardAllDocumentsAreVerified()
-        guardStatusCanBeVerified()
-        guardCardStatusToBeVerified()
+    fun verify(): Either<VerifyUserError, User> = either {
+        guardAllDocumentsAreVerified().bind()
 
-        return copy(status = VERIFIED)
+        guardStatusCanBeVerified().bind()
+        guardCardStatusToBeVerified().bind()
+
+        copy(status = VERIFIED)
             .also { it.pushEvent(UserVerifiedEvent(id.toString())) }
     }
 
-    private fun guardAllDocumentsAreVerified() =
-        if (documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit
-        else throw NotAllDocumentVerifiedException()
+    private fun guardAllDocumentsAreVerified(): Either<VerifyUserError, Unit> =
+        if (documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit.right()
+        else DocumentsNotVerified.left()
 
-    private fun guardStatusCanBeVerified() {
+    private fun guardStatusCanBeVerified(): Either<VerifyUserError, Unit> =
         when(status) {
-            INCOMPLETE -> throw UserStatusCannotBeVerifiedException()
-            VERIFIED -> throw UserAlreadyVerifiedException()
-            PENDING_VERIFICATION -> Unit
+            INCOMPLETE -> UserIsIncomplete.left()
+            VERIFIED -> UserAlreadyVerified.left()
+            PENDING_VERIFICATION -> Unit.right()
         }
-    }
 
-    private fun guardCardStatusToBeVerified() {
+    private fun guardCardStatusToBeVerified(): Either<VerifyUserError, Unit> =
         when(cardStatus) {
-            PENDING -> throw CardStatusNotConfirmedException()
-            CONFIRMED -> Unit
+            PENDING -> CardStatusNotConfirmed.left()
+            CONFIRMED -> Unit.right()
         }
-    }
 
     private fun toUserCreatedEvent(
         id: UserId,
@@ -94,5 +102,13 @@ data class User(
     class CannotChangeEmailToTheSameValueException() : RuntimeException()
     class UserAlreadyExistsException() : RuntimeException()
 }
+
+sealed interface VerifyProfileDomainError {
+    object UserIsIncomplete : VerifyProfileDomainError
+    object CardStatusNotConfirmed : VerifyProfileDomainError
+    object UserAlreadyVerified : VerifyProfileDomainError
+    object DocumentsNotVerified : VerifyProfileDomainError
+}
+
 
 

@@ -1,14 +1,23 @@
 package com.example.excepcionesexcepcionales.session.user.application.create
 
+import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.raise.either
+import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.Unknown
+import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.UserAlreadyExists
 import com.example.excepcionesexcepcionales.session.user.domain.Email
+import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria.ByEmail
 import com.example.excepcionesexcepcionales.session.user.domain.Name
 import com.example.excepcionesexcepcionales.session.user.domain.PhoneNumber
 import com.example.excepcionesexcepcionales.session.user.domain.Surname
 import com.example.excepcionesexcepcionales.session.user.domain.User
-import com.example.excepcionesexcepcionales.session.user.domain.User.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.session.user.domain.UserId
 import com.example.excepcionesexcepcionales.session.user.domain.UserRepository
+import com.example.excepcionesexcepcionales.session.user.domain.existsOrElse
+import com.example.excepcionesexcepcionales.session.user.domain.saveOrElse
+import com.example.excepcionesexcepcionales.shared.error.failIfTrue
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
+import com.example.excepcionesexcepcionales.shared.event.publishOrElse
 import java.time.ZonedDateTime
 
 class UserCreator(
@@ -23,33 +32,42 @@ class UserCreator(
         createdOn: ZonedDateTime,
         name: Name,
         surname: Surname
-    ) {
-        guardUserDoesNotExists(email)
+    ): Either<CreateUserError, Unit> = either {
+        guardUserDoesNotExists(email).bind()
 
         val user = User.create(id, email, phoneNumber, createdOn, name, surname)
 
-        repository.save(user)
-        publisher.publish(user.pullEvents())
+        repository.saveOrElse(user) { Unknown(it) }.bind()
+        publisher.publishOrElse(user.pullEvents()) { Unknown(it) }.bind()
     }
 
-    private fun guardUserDoesNotExists(email: Email) {
-        if (repository.existByEmail(email)) throw UserAlreadyExistsException()
-    }
+    private fun save(user: User) = repository.saveOrElse(user) { Unknown(it) }
+
+    private fun publish(user: User) = publisher.publishOrElse(user.pullEvents()) { Unknown(it) }
+
+    private fun guardUserDoesNotExists(email: Email) =
+        repository.existsOrElse(ByEmail(email)) { Unknown(it) }
+            .failIfTrue { UserAlreadyExists }
+
 }
 
-//sealed class CreateUserResult {
-//    object InvalidName: CreateUserResult()
-//    object InvalidSurname: CreateUserResult()
-//    object InvalidEmail: CreateUserResult()
-//    object InvalidPhoneNumber: CreateUserResult()
-//    object UserAlreadyExists: CreateUserResult()
-//    data class Success(val user: User): CreateUserResult()
-//    class Unknown(val reason: Throwable): CreateUserResult()
-//}
+sealed interface CreateUserError2 {
+    object InvalidName: CreateUserError2
+    object InvalidSurname: CreateUserError2
+    object InvalidEmail: CreateUserError2
+    object InvalidPhoneNumber: CreateUserError2
+    object UserAlreadyExists: CreateUserError2
+    class Unknown(val reason: Throwable): CreateUserError2
+}
 
-//fun CreateUserResult.onSuccess(block: (User) -> CreateUserResult) =
-//    if (this is CreateUserResult.Success) block(user)
-//    else this
+sealed class CreateUserError {
+    object InvalidName: CreateUserError()
+    object InvalidSurname: CreateUserError()
+    object InvalidEmail: CreateUserError()
+    object InvalidPhoneNumber: CreateUserError()
+    object UserAlreadyExists: CreateUserError()
+    class Unknown(val reason: Throwable): CreateUserError()
+}
 
 //private fun RepositoryResult<Boolean>.createUser(
 //    id: UserId,
