@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @CrossOrigin
-class CreateUserController(private val createUser: HiveImperativeUserCreator) {
+class HiveCreateUserController(private val createUser: HiveImperativeUserCreator) {
 
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN', 'ROLE_MANAGER')")
     @PostMapping(value = ["/user"], produces = [APPLICATION_JSON_VALUE])

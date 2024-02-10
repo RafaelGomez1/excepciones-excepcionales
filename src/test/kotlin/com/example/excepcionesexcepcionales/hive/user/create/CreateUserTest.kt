@@ -1,10 +1,9 @@
 package com.example.excepcionesexcepcionales.hive.user.create
 
 import com.example.excepcionesexcepcionales.hive.user.application.create.fp.HiveCreateUserMediator
-import com.example.excepcionesexcepcionales.hive.user.domain.Role.BASIC
-import com.example.excepcionesexcepcionales.hive.user.domain.Role.SUPERADMIN
+import com.example.excepcionesexcepcionales.hive.user.domain.Role.*
 import com.example.excepcionesexcepcionales.hive.user.fakes.FakeUserRepository
-import com.example.excepcionesexcepcionales.hive.user.infrastructure.controller.FunctionalCreateUserController
+import com.example.excepcionesexcepcionales.hive.user.infrastructure.controller.FunctionalHiveCreateUserController
 import com.example.excepcionesexcepcionales.hive.user.infrastructure.controller.ServerErrors.INVALID_EMAIL
 import com.example.excepcionesexcepcionales.hive.user.infrastructure.controller.ServerErrors.INVALID_ROLE
 import com.example.excepcionesexcepcionales.hive.user.infrastructure.controller.ServerErrors.ROLE_NOT_ALLOWED
@@ -22,7 +21,7 @@ class CreateUserTest {
     private val repository = FakeUserRepository
     private val mediator = HiveCreateUserMediator(repository)
 
-    private val controller = FunctionalCreateUserController(mediator)
+    private val controller = FunctionalHiveCreateUserController(mediator)
 
     @BeforeEach
     fun setUp() {
@@ -96,6 +95,6 @@ class CreateUserTest {
         assertFalse { repository.wasPersisted(user) }
     }
 
-    private val user = UserMother.random()
+    private val user = UserMother.random(role = MANAGER)
     private val request = UserRequestMother.fromUser(user)
 }

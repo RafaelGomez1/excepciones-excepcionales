@@ -1,12 +1,12 @@
 package com.example.excepcionesexcepcionales.session.user.application.verify
 
 import arrow.core.Either
+import arrow.core.left
 import arrow.core.raise.either
 import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError.UserDoesNotExist
 import com.example.excepcionesexcepcionales.session.user.domain.FindUserCriteria.ById
 import com.example.excepcionesexcepcionales.session.user.domain.UserId
 import com.example.excepcionesexcepcionales.session.user.domain.UserRepository
-import com.example.excepcionesexcepcionales.session.user.domain.findOrElse
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
 
 class UserVerifier(
@@ -15,7 +15,7 @@ class UserVerifier(
 ) {
 
     fun invoke(id: UserId): Either<VerifyUserError, Unit> = either {
-        val user = repository.findOrElse(ById(id)) { UserDoesNotExist }.bind()
+        val user = repository.find(ById(id)) ?: UserDoesNotExist.left().bind()
 
         val verifiedUser = user.verify().bind()
 

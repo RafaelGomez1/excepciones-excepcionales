@@ -2,17 +2,7 @@ package com.example.excepcionesexcepcionales.session.user.primaryAdapter.create
 
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommand
 import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserCommandHandler
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.InvalidEmail
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.InvalidName
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.InvalidPhoneNumber
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.InvalidSurname
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.Unknown
-import com.example.excepcionesexcepcionales.session.user.application.create.CreateUserError.UserAlreadyExists
 import com.example.excepcionesexcepcionales.shared.clock.Clock
-import com.example.excepcionesexcepcionales.shared.error.Response
-import com.example.excepcionesexcepcionales.shared.error.toServerResponse
-import com.example.excepcionesexcepcionales.shared.error.withoutBody
 import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import com.example.excepcionesexcepcionales.solution.user.domain.Email.InvalidEmailException
 import com.example.excepcionesexcepcionales.solution.user.domain.Name.InvalidNameException
@@ -43,7 +33,8 @@ class CreateUserController(
 ) {
 
     @PostMapping("/users")
-    fun create(@RequestBody body: CreateUserRequestBody): Response<*> =
+    @ResponseStatus(CREATED)
+    fun create(@RequestBody body: CreateUserRequestBody): Unit =
         with(body) {
             handler.handle(
                 CreateUserCommand(
@@ -55,21 +46,8 @@ class CreateUserController(
                     surname = surname,
                     createdOn = clock.now()
                 )
-            ).toServerResponse(
-                onValidResponse = { Response.status(CREATED).withoutBody() },
-                onError = { error -> error.toServerError()}
             )
         }
-
-        private fun CreateUserError.toServerError(): Response<*> =
-            when(this) {
-                InvalidEmail -> Response.badRequest().body(INVALID_EMAIL)
-                InvalidName -> Response.badRequest().body(INVALID_NAME)
-                InvalidPhoneNumber -> Response.badRequest().body(INVALID_PHONE_NUMBER)
-                InvalidSurname -> Response.badRequest().body(INVALID_SURNAME)
-                UserAlreadyExists -> Response.status(CONFLICT).body(USER_ALREADY_EXISTS)
-                is Unknown -> throw reason
-            }
 
     @RestControllerAdvice(assignableTypes = [CreateUserController::class])
     class CreateUserControllerExceptionHandler {

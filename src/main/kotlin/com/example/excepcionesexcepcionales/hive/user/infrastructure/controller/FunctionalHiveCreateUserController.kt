@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @CrossOrigin
-class FunctionalCreateUserController(private val createUser: HiveCreateUserMediator) {
+class FunctionalHiveCreateUserController(private val createUser: HiveCreateUserMediator) {
 
     @PostMapping(value = ["/user/functional"], produces = [APPLICATION_JSON_VALUE])
     @ResponseBody

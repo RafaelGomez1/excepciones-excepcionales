@@ -43,7 +43,7 @@ class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepos
 
 
     // Methods for the Sealed Section
-    override fun exists(criteria: ExistsUserCriteria): RepositoryResult<Boolean> =
+    override fun existsSealed(criteria: ExistsUserCriteria): RepositoryResult<Boolean> =
         runCatching {
             when(criteria) {
                 is ByEmail -> jpaRepository.existsByEmailIgnoreCase(criteria.email.value)
@@ -58,15 +58,11 @@ class H2UserRepository(private val jpaRepository: JpaUserRepository) : UserRepos
             .map { RepoSuccess(Unit) }
             .getOrElse { error -> RepoUnknown(error) }
 
-    // Methods for the Either Section
-    override fun existsEither(criteria: ExistsUserCriteria): Either<Throwable, Boolean> = catch {
+    override fun exists(criteria: ExistsUserCriteria): Boolean =
         when(criteria) {
             is ByEmail -> jpaRepository.existsByEmailIgnoreCase(criteria.email.value)
             is ById -> jpaRepository.existsById(criteria.id.value)
         }
-    }
-
-    override fun eitherSave(user: User): Either<Throwable, Unit> = catch { jpaRepository.save(user.toJpa()) }
 }
 
 internal fun JpaUser.toDomain(): User = User(

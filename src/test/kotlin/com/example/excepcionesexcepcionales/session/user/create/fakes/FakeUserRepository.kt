@@ -1,7 +1,5 @@
 package com.example.excepcionesexcepcionales.session.user.create.fakes
 
-import arrow.core.Either
-import arrow.core.Either.Companion.catch
 import com.example.excepcionesexcepcionales.session.user.domain.*
 import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria.ByEmail
 import com.example.excepcionesexcepcionales.session.user.domain.ExistsUserCriteria.ById
@@ -19,11 +17,12 @@ object FakeUserRepository : UserRepository, FakeRepository<User> {
     override fun existByEmail(email: Email): Boolean = elements.any { it.email == email }
 
     override fun save(user: User) { elements.saveOrUpdate(user) }
+
     override fun find(criteria: FindUserCriteria): User? {
         TODO("Not yet implemented")
     }
 
-    override fun exists(criteria: ExistsUserCriteria): RepositoryResult<Boolean> =
+    override fun existsSealed(criteria: ExistsUserCriteria): RepositoryResult<Boolean> =
         runCatching {
             when(criteria) {
                 is ByEmail -> elements.any { it.email == criteria.email }
@@ -38,12 +37,9 @@ object FakeUserRepository : UserRepository, FakeRepository<User> {
             .map { RepoSuccess(Unit) }
             .getOrElse { error -> RepoUnknown(error) }
 
-    override fun existsEither(criteria: ExistsUserCriteria): Either<Throwable, Boolean> = catch {
+    override fun exists(criteria: ExistsUserCriteria): Boolean =
         when (criteria) {
             is ByEmail -> elements.any { it.email == criteria.email }
             is ById -> elements.any { it.id == criteria.id }
         }
-    }
-
-    override fun eitherSave(user: User): Either<Throwable, Unit> = catch { elements.saveOrUpdate(user) }
 }

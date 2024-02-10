@@ -13,6 +13,7 @@ import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResul
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
 import com.example.excepcionesexcepcionales.solution.user.domain.UserId
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
@@ -48,16 +49,14 @@ class H2SolutionUserRepository(private val jpaRepository: JpaUserRepository) : S
             .map { Success(user) }
             .getOrElse { error -> Unknown(error) }
 
-    override fun find(criteria: FindUserCriteria): Either<Throwable, SolutionUser> {
-        TODO("Not yet implemented")
-    }
+    override fun find(criteria: FindUserCriteria): SolutionUser? =
+        when(criteria) {
+            is FindUserCriteria.ById -> jpaRepository.findByIdOrNull(criteria.id.value)
+        }?.toSolutionDomain()
 
-    override fun exists(criteria: ExistsUserCriteria): Either<Throwable, Boolean> = catch {
+    override fun exists(criteria: ExistsUserCriteria): Boolean =
         when(criteria) {
             is ByEmail -> jpaRepository.existsByEmailIgnoreCase(criteria.email.value)
             is ById -> jpaRepository.existsById(criteria.id.value)
         }
-    }
-
-    override fun eitherSave(user: SolutionUser): Either<Throwable, Unit> = catch { jpaRepository.save(user.toJpa()) }
 }

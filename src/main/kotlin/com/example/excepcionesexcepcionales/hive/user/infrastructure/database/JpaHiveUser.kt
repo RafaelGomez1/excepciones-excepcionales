@@ -24,6 +24,6 @@ data class JpaHiveUser(
 internal fun User.toJpa(): JpaHiveUser = JpaHiveUser(name = name, email = email.value, role = role.name)
 
 @Repository
-interface JpaUserRepository : CrudRepository<JpaHiveUser, String> {
+interface JpaHiveUserRepository : CrudRepository<JpaHiveUser, String> {
     fun findAllByName(name: String): List<JpaHiveUser>
 }

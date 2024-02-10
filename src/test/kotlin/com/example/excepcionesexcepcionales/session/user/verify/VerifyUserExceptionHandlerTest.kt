@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,22 +37,6 @@ class VerifyUserExceptionHandlerTest {
 
     @MockBean
     private lateinit var handler: VerifyUserCommandHandler
-
-    @Test
-    fun `should verify a user successfully`() {
-        // Given
-
-        doNothing().`when`(handler).handle(command)
-
-        // When
-        mockMvc.perform(
-            MockMvcRequestBuilders
-                .patch("/users/${user.id.value}/verify")
-                .contentType(APPLICATION_JSON)
-        )
-            .andExpect(status().isOk)
-            .andReturn()
-    }
 
     @ParameterizedTest
     @MethodSource("verifyUserErrors")

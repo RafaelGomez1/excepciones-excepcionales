@@ -1,18 +1,10 @@
 package com.example.excepcionesexcepcionales.solution.user.fakes
 
-import arrow.core.Either
-import arrow.core.Either.Companion.catch
-import com.example.excepcionesexcepcionales.solution.user.domain.Email
-import com.example.excepcionesexcepcionales.solution.user.domain.ExistsUserCriteria
+import com.example.excepcionesexcepcionales.solution.user.domain.*
 import com.example.excepcionesexcepcionales.solution.user.domain.ExistsUserCriteria.ByEmail
 import com.example.excepcionesexcepcionales.solution.user.domain.ExistsUserCriteria.ById
-import com.example.excepcionesexcepcionales.solution.user.domain.FindUserCriteria
-import com.example.excepcionesexcepcionales.solution.user.domain.FindUserCriteria.ById as FindById
-import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult
 import com.example.excepcionesexcepcionales.solution.user.domain.RepositoryResult.Success
-import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser
-import com.example.excepcionesexcepcionales.solution.user.domain.UserId
-import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.FindUserCriteria.ById as FindById
 
 object FakeSolutionUserRepository : SolutionUserRepository, FakeRepository<SolutionUser> {
     override val elements = mutableListOf<SolutionUser>()
@@ -36,20 +28,14 @@ object FakeSolutionUserRepository : SolutionUserRepository, FakeRepository<Solut
         return Success(user)
     }
 
-    override fun find(criteria: FindUserCriteria): Either<Throwable, SolutionUser> = catch {
+    override fun find(criteria: FindUserCriteria): SolutionUser? =
         when(criteria) {
             is FindById -> elements.first { it.id == criteria.id }
         }
-    }
 
-    override fun exists(criteria: ExistsUserCriteria): Either<Throwable, Boolean> = catch {
+    override fun exists(criteria: ExistsUserCriteria): Boolean =
         when(criteria) {
             is ByEmail -> elements.any { it.email == criteria.email }
             is ById -> elements.any { it.id == criteria.id }
         }
-    }
-
-    override fun eitherSave(user: SolutionUser): Either<Throwable, Unit> = catch {
-        elements.saveOrUpdate(user)
-    }
 }

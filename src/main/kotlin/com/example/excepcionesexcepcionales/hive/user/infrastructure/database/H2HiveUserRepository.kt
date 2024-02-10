@@ -9,7 +9,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class H2HiveUserRepository(private val repository: JpaUserRepository) : UserRepository {
+class H2HiveUserRepository(private val repository: JpaHiveUserRepository) : UserRepository {
     override fun findByEmail(email: String): User? = repository.findByIdOrNull(email)?.toDomain()
 
     override fun search(criteria: SearchUserCriteria): List<User> =

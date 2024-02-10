@@ -1,7 +1,5 @@
 package com.example.excepcionesexcepcionales.solution.user.domain
 
-import arrow.core.Either
-
 interface SolutionUserRepository {
     fun findBy(userId: UserId): SolutionUser
     fun existBy(userId: UserId): Boolean
@@ -15,36 +13,9 @@ interface SolutionUserRepository {
     fun saveSealed(user: SolutionUser): RepositoryResult<SolutionUser>
 
     // Functional Version
-    fun find(criteria: FindUserCriteria): Either<Throwable, SolutionUser>
-    fun exists(criteria: ExistsUserCriteria): Either<Throwable, Boolean>
-    fun eitherSave(user: SolutionUser): Either<Throwable, Unit>
+    fun find(criteria: FindUserCriteria): SolutionUser?
+    fun exists(criteria: ExistsUserCriteria): Boolean
 }
-
-fun <Error> SolutionUserRepository.saveOrElse(
-    user: SolutionUser,
-    onError: (Throwable) -> Error
-): Either<Error, SolutionUser> =
-    eitherSave(user)
-        .mapLeft{ error -> onError(error) }
-        .map { user }
-
-fun <Error> SolutionUserRepository.findOrElse(
-    criteria: FindUserCriteria,
-    onNotFound: () -> Error,
-    onError: (Throwable) -> Error,
-): Either<Error, SolutionUser> =
-    find(criteria)
-        .mapLeft{ error ->
-            if (error is NoSuchElementException) onNotFound()
-            else onError(error)
-        }
-
-fun <Error> SolutionUserRepository.existsOrElse(
-    criteria: ExistsUserCriteria,
-    onError: (Throwable) -> Error
-): Either<Error, Boolean> =
-    exists(criteria)
-        .mapLeft{ error -> onError(error) }
 
 sealed interface RepositoryResult<T> {
     class Success<T>(val value: T): RepositoryResult<T>
