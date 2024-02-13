@@ -10,15 +10,22 @@ import com.example.excepcionesexcepcionales.solution.user.mothers.UserCreatedEve
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_EMAIL
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_NAME
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_PHONE_NUMBER
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_SURNAME
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_EXISTS
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.functional.FunctionalCreateUserController
-import java.util.stream.Stream
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.*
+import java.util.stream.Stream
 
 class FunctionalCreateUserTest {
 
@@ -49,9 +56,9 @@ class FunctionalCreateUserTest {
         val result = controller.create(body)
 
         // Then
-        Assertions.assertEquals(HttpStatus.CREATED, result.statusCode)
-        Assertions.assertTrue { repository.wasPersisted(user) }
-        Assertions.assertTrue { publisher.wasPublished(expectedEvent) }
+        assertEquals(CREATED, result.statusCode)
+        assertTrue { repository.contains(user) }
+        assertTrue { publisher.wasPublished(expectedEvent) }
     }
 
     @Test
@@ -65,9 +72,9 @@ class FunctionalCreateUserTest {
         val result = controller.create(body)
 
         // Then
-        Assertions.assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        Assertions.assertEquals(UserServerErrors.USER_ALREADY_EXISTS, result.body)
-        Assertions.assertFalse { publisher.wasPublished(expectedEvent) }
+        assertEquals(CONFLICT, result.statusCode)
+        assertEquals(USER_ALREADY_EXISTS, result.body)
+        assertFalse { publisher.wasPublished(expectedEvent) }
     }
 
 
@@ -82,8 +89,8 @@ class FunctionalCreateUserTest {
         val result = controller.create(body)
 
         // Then
-        Assertions.assertEquals(status, result.statusCode)
-        Assertions.assertEquals(error, result.body)
+        assertEquals(status, result.statusCode)
+        assertEquals(error, result.body)
     }
 
     private fun `user already exists`() {
@@ -107,28 +114,28 @@ class FunctionalCreateUserTest {
         fun validationErrors() = Stream.of(
             Arguments.of(
                 body.copy(email = "abe"),
-                HttpStatus.BAD_REQUEST,
-                UserServerErrors.INVALID_EMAIL
+                BAD_REQUEST,
+                INVALID_EMAIL
             ),
             Arguments.of(
                 body.copy(phoneNumber = "+3a1"),
-                HttpStatus.BAD_REQUEST,
-                UserServerErrors.INVALID_PHONE_NUMBER
+                BAD_REQUEST,
+                INVALID_PHONE_NUMBER
             ),
             Arguments.of(
                 body.copy(phonePrefix = "1bd"),
-                HttpStatus.BAD_REQUEST,
-                UserServerErrors.INVALID_PHONE_NUMBER
+                BAD_REQUEST,
+                INVALID_PHONE_NUMBER
             ),
             Arguments.of(
                 body.copy(name = "    "),
-                HttpStatus.BAD_REQUEST,
-                UserServerErrors.INVALID_NAME
+                BAD_REQUEST,
+                INVALID_NAME
             ),
             Arguments.of(
                 body.copy(surname = "123412341234123412341234123412341234123412341234123412341234123412341234123412341"),
-                HttpStatus.BAD_REQUEST,
-                UserServerErrors.INVALID_SURNAME
+                BAD_REQUEST,
+                INVALID_SURNAME
             ),
         )
     }

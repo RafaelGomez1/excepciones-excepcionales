@@ -3,6 +3,7 @@ package com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.c
 import com.example.excepcionesexcepcionales.shared.clock.Clock
 import com.example.excepcionesexcepcionales.shared.error.Response
 import com.example.excepcionesexcepcionales.shared.error.toServerResponse
+import com.example.excepcionesexcepcionales.shared.error.withoutBody
 import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidEmail
@@ -50,7 +51,7 @@ class FunctionalCreateUserController(
                 )
             ).toServerResponse(
                 onError = { error -> error.toServerError() },
-                onValidResponse = { Response.status(CREATED).body(null) }
+                onValidResponse = { Response.status(CREATED).withoutBody() }
             )
         }
 

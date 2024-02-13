@@ -1,11 +1,5 @@
 package com.example.excepcionesexcepcionales.session.user.domain
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.raise.either
-import arrow.core.right
-import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError
-import com.example.excepcionesexcepcionales.session.user.application.verify.VerifyUserError.DomainError.*
 import com.example.excepcionesexcepcionales.session.user.domain.CardStatus.CONFIRMED
 import com.example.excepcionesexcepcionales.session.user.domain.CardStatus.PENDING
 import com.example.excepcionesexcepcionales.session.user.domain.Status.*
@@ -41,32 +35,35 @@ data class User(
             .also { it.pushEvent(it.toUserCreatedEvent(id, email, phoneNumber, name, surname, createdOn, status, cardStatus))}
     }
 
-    fun verify(): Either<VerifyUserError, User> = either {
-        guardAllDocumentsAreVerified().bind()
+    fun verify(): User {
+        guardAllDocumentsAreVerified()
+        guardStatusCanBeVerified()
+        guardCardStatusToBeVerified()
 
-        guardStatusCanBeVerified().bind()
-        guardCardStatusToBeVerified().bind()
-
-        copy(status = VERIFIED)
+        return copy(status = VERIFIED)
             .also { it.pushEvent(UserVerifiedEvent(id.toString())) }
     }
 
-    private fun guardAllDocumentsAreVerified(): Either<VerifyUserError, Unit> =
-        if (documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit.right()
-        else DocumentsNotVerified.left()
+    private fun guardAllDocumentsAreVerified() {
+        if (documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit
+        if (documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit
+        else throw NotAllDocumentVerifiedException()
+    }
 
-    private fun guardStatusCanBeVerified(): Either<VerifyUserError, Unit> =
-        when(status) {
-            INCOMPLETE -> UserIsIncomplete.left()
-            VERIFIED -> UserAlreadyVerified.left()
-            PENDING_VERIFICATION -> Unit.right()
+    private fun guardStatusCanBeVerified() {
+        when (status) {
+            INCOMPLETE -> throw UserStatusCannotBeVerifiedException()
+            VERIFIED -> throw UserAlreadyVerifiedException()
+            PENDING_VERIFICATION -> Unit
         }
+    }
 
-    private fun guardCardStatusToBeVerified(): Either<VerifyUserError, Unit> =
+    private fun guardCardStatusToBeVerified() {
         when(cardStatus) {
-            PENDING -> CardStatusNotConfirmed.left()
-            CONFIRMED -> Unit.right()
+            PENDING -> throw CardStatusNotConfirmedException()
+            CONFIRMED -> Unit
         }
+    }
 
     private fun toUserCreatedEvent(
         id: UserId,

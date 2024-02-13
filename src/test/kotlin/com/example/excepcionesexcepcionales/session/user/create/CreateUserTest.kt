@@ -54,7 +54,7 @@ class CreateUserTest {
         handler.handle(command)
 
         // Then
-        assertTrue { repository.wasPersisted(user) }
+        assertTrue { repository.contains(user) }
         assertTrue { publisher.wasPublished(expectedEvent) }
     }
 

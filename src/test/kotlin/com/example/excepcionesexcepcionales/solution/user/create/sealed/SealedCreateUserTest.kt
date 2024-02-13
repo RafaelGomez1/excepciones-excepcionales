@@ -59,7 +59,7 @@ class SealedCreateUserTest {
 
         // Then
         assertEquals(CREATED, result.statusCode)
-        assertTrue { repository.wasPersisted(user) }
+        assertTrue { repository.contains(user) }
         assertTrue { publisher.wasPublished(expectedEvent) }
     }
 
