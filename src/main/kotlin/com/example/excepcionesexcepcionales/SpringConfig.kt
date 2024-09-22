@@ -12,6 +12,7 @@ import com.example.excepcionesexcepcionales.shared.id.UUIDGenerator
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.FunctionalCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.SealedCreateUserCommandHandler
+import com.example.excepcionesexcepcionales.solution.user.application.verify.functional.FunctionalVerifyUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -35,6 +36,11 @@ class SpringConfig {
         publisher: DomainEventPublisher
     ): VerifyUserCommandHandler = VerifyUserCommandHandler(repository, publisher)
 
+    @Bean
+    fun functionalVerifyUserCommandHandler(
+        repository: SolutionUserRepository,
+        publisher: DomainEventPublisher
+    ): FunctionalVerifyUserCommandHandler = FunctionalVerifyUserCommandHandler(repository, publisher)
 
     @Bean
     fun functionalCreateUserCommandHandler(

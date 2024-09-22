@@ -1,7 +1,5 @@
 package com.example.excepcionesexcepcionales.solution.user.create.functional
 
-import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest
-import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest.Companion
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.FunctionalCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeClock
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
@@ -19,8 +17,6 @@ import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.cr
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.functional.FunctionalCreateUserController
 import java.util.stream.Stream
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

@@ -13,6 +13,7 @@ import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.cr
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.PAYMENT_METHOD_NOT_CONFIRMED
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_EXISTS
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_VERIFIED
+import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_DOES_NOT_EXIST
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
@@ -37,7 +38,7 @@ class VerifyUserController(
     class VerifyUserControllerExceptionHandler {
         @ExceptionHandler(value = [UserDoesNotExistException::class])
         @ResponseStatus(UNPROCESSABLE_ENTITY)
-        fun handleError(e: UserDoesNotExistException) = USER_ALREADY_EXISTS
+        fun handleError(e: UserDoesNotExistException) = USER_DOES_NOT_EXIST
 
         @ExceptionHandler(value = [IllegalArgumentException::class])
         @ResponseStatus(BAD_REQUEST)

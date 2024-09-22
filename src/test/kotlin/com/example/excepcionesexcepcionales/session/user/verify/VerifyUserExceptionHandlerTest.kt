@@ -11,12 +11,9 @@ import com.example.excepcionesexcepcionales.session.user.mothers.VerifyUserComma
 import com.example.excepcionesexcepcionales.session.user.primaryAdapter.verify.VerifyUserController
 import com.example.excepcionesexcepcionales.session.user.primaryAdapter.verify.VerifyUserController.VerifyUserControllerExceptionHandler
 import java.util.stream.Stream
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

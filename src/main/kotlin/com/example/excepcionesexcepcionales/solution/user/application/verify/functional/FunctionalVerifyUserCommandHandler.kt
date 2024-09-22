@@ -14,7 +14,6 @@ class FunctionalVerifyUserCommandHandler(
 
     fun handle(command: FunctionalVerifyUserCommand): Either<FunctionalVerifyUserError, Unit> =
         verifyUser(UserId(command.userId))
-
 }
 
 data class FunctionalVerifyUserCommand(val userId: UUID)
