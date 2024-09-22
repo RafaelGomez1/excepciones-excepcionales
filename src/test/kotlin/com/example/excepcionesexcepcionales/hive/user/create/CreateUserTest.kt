@@ -37,7 +37,7 @@ class CreateUserTest {
         assertEquals(CREATED, result.statusCode)
         assertEquals("{}", result.body)
 
-        assertTrue { repository.contains(user) }
+        repository.assertContains(user)
     }
 
     @Test
@@ -52,7 +52,7 @@ class CreateUserTest {
         assertEquals(BAD_REQUEST, result.statusCode)
         assertEquals(INVALID_EMAIL, result.body)
 
-        assertFalse { repository.contains(user) }
+        repository.assertDoesNotContain(user)
     }
 
     @Test
@@ -67,7 +67,7 @@ class CreateUserTest {
         assertEquals(BAD_REQUEST, result.statusCode)
         assertEquals(INVALID_ROLE, result.body)
 
-        assertFalse { repository.contains(user) }
+        repository.assertDoesNotContain(user)
     }
 
     @Test
@@ -92,7 +92,7 @@ class CreateUserTest {
         assertEquals(BAD_REQUEST, result.statusCode)
         assertEquals(ROLE_NOT_ALLOWED, result.body)
 
-        assertFalse { repository.contains(user) }
+        repository.assertDoesNotContain(user)
     }
 
     private val user = UserMother.random(role = MANAGER)

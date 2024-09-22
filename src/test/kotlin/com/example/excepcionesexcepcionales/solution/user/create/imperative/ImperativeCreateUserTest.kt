@@ -1,5 +1,7 @@
 package com.example.excepcionesexcepcionales.solution.user.create.imperative
 
+import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest
+import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest.Companion
 import com.example.excepcionesexcepcionales.solution.user.application.create.imperative.ImperativeCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUser.UserAlreadyExistsException
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
@@ -31,8 +33,8 @@ class ImperativeCreateUserTest {
         handler.handle(command)
 
         // Then
-        assertTrue { repository.contains(user) }
-        assertTrue { publisher.wasPublished(expectedEvent) }
+        repository.assertContains(user)
+        publisher.assertPublished(expectedEvent)
     }
 
     @Test
@@ -46,7 +48,7 @@ class ImperativeCreateUserTest {
         }
 
         // Then
-        assertFalse { publisher.wasPublished(expectedEvent) }
+        publisher.assertNoEventsPublished()
     }
 
     private fun `user already exists`() {

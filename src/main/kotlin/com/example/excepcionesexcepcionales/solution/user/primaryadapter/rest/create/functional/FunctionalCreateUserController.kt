@@ -6,12 +6,7 @@ import com.example.excepcionesexcepcionales.shared.error.toServerResponse
 import com.example.excepcionesexcepcionales.shared.error.withoutBody
 import com.example.excepcionesexcepcionales.shared.id.IdGenerator
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError
-import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidEmail
-import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidMobilePhone
-import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidName
-import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.InvalidSurname
-import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.Unknown
-import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.UserAlreadyExists
+import com.example.excepcionesexcepcionales.solution.user.application.create.functional.CreateUserError.*
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.FunctionalCreateUserCommand
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.FunctionalCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
@@ -20,9 +15,6 @@ import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.cr
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_PHONE_NUMBER
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_SURNAME
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_EXISTS
-import java.time.ZonedDateTime
-import java.util.UUID
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.web.bind.annotation.PostMapping
@@ -62,6 +54,5 @@ class FunctionalCreateUserController(
             is InvalidName -> Response.badRequest().body(INVALID_NAME)
             is InvalidSurname -> Response.badRequest().body(INVALID_SURNAME)
             is UserAlreadyExists -> Response.status(CONFLICT).body(USER_ALREADY_EXISTS)
-            is Unknown -> throw error
         }
 }

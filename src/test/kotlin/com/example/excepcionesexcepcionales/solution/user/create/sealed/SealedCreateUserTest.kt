@@ -1,5 +1,7 @@
 package com.example.excepcionesexcepcionales.solution.user.create.sealed
 
+import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest
+import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest.Companion
 import com.example.excepcionesexcepcionales.solution.user.application.create.sealed.SealedCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeClock
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
@@ -59,8 +61,8 @@ class SealedCreateUserTest {
 
         // Then
         assertEquals(CREATED, result.statusCode)
-        assertTrue { repository.contains(user) }
-        assertTrue { publisher.wasPublished(expectedEvent) }
+        repository.assertContains(user)
+        publisher.assertPublished(expectedEvent)
     }
 
     @Test
@@ -76,7 +78,7 @@ class SealedCreateUserTest {
         // Then
         assertEquals(CONFLICT, result.statusCode)
         assertEquals(USER_ALREADY_EXISTS, result.body)
-        assertFalse { publisher.wasPublished(expectedEvent) }
+        publisher.assertNoEventsPublished()
     }
 
 

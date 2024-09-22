@@ -2,8 +2,8 @@ package com.example.excepcionesexcepcionales.solution.user.application.verify.im
 
 import com.example.excepcionesexcepcionales.shared.event.DomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.application.find.UserFinder
-import com.example.excepcionesexcepcionales.solution.user.domain.UserId
 import com.example.excepcionesexcepcionales.solution.user.domain.SolutionUserRepository
+import com.example.excepcionesexcepcionales.solution.user.domain.UserId
 
 class ImperativeUserVerifier(
     private val repository: SolutionUserRepository,
@@ -18,4 +18,5 @@ class ImperativeUserVerifier(
         repository.save(user)
         publisher.publish(verifiedUser.pullEvents())
     }
+
 }

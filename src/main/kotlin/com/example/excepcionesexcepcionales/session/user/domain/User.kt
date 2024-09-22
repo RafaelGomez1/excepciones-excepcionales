@@ -94,12 +94,5 @@ data class User(
     class UserAlreadyExistsException() : RuntimeException()
 }
 
-sealed interface VerifyProfileDomainError {
-    object UserIsIncomplete : VerifyProfileDomainError
-    object CardStatusNotConfirmed : VerifyProfileDomainError
-    object UserAlreadyVerified : VerifyProfileDomainError
-    object DocumentsNotVerified : VerifyProfileDomainError
-}
-
 
 

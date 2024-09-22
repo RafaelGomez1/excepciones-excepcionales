@@ -1,5 +1,7 @@
 package com.example.excepcionesexcepcionales.solution.user.create.functional
 
+import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest
+import com.example.excepcionesexcepcionales.session.user.create.CreateUserTest.Companion
 import com.example.excepcionesexcepcionales.solution.user.application.create.functional.FunctionalCreateUserCommandHandler
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeClock
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
@@ -9,23 +11,25 @@ import com.example.excepcionesexcepcionales.solution.user.mothers.CreateUserRequ
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserCreatedEventMother
 import com.example.excepcionesexcepcionales.solution.user.mothers.UserMother
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.CreateUserRequestBody
-import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_EMAIL
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_NAME
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_PHONE_NUMBER
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.INVALID_SURNAME
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.errors.UserServerErrors.USER_ALREADY_EXISTS
 import com.example.excepcionesexcepcionales.solution.user.primaryadapter.rest.create.functional.FunctionalCreateUserController
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.*
+import java.util.stream.Stream
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.*
-import java.util.stream.Stream
+import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.CONFLICT
+import org.springframework.http.HttpStatus.CREATED
 
 class FunctionalCreateUserTest {
 
@@ -57,8 +61,8 @@ class FunctionalCreateUserTest {
 
         // Then
         assertEquals(CREATED, result.statusCode)
-        assertTrue { repository.contains(user) }
-        assertTrue { publisher.wasPublished(expectedEvent) }
+        repository.assertContains(user)
+        publisher.assertPublished(expectedEvent)
     }
 
     @Test
@@ -74,7 +78,7 @@ class FunctionalCreateUserTest {
         // Then
         assertEquals(CONFLICT, result.statusCode)
         assertEquals(USER_ALREADY_EXISTS, result.body)
-        assertFalse { publisher.wasPublished(expectedEvent) }
+        publisher.assertNoEventsPublished()
     }
 
 

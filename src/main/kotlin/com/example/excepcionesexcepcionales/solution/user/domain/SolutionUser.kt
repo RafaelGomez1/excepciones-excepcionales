@@ -1,14 +1,16 @@
 package com.example.excepcionesexcepcionales.solution.user.domain
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.raise.either
+import arrow.core.right
 import com.example.excepcionesexcepcionales.shared.event.Aggregate
 import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserCreatedEvent
-import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserEmailChangedEvent
 import com.example.excepcionesexcepcionales.shared.event.DomainEvent.UserVerifiedEvent
 import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus.CONFIRMED
 import com.example.excepcionesexcepcionales.solution.user.domain.CardStatus.PENDING
-import com.example.excepcionesexcepcionales.solution.user.domain.Status.INCOMPLETE
-import com.example.excepcionesexcepcionales.solution.user.domain.Status.PENDING_VERIFICATION
-import com.example.excepcionesexcepcionales.solution.user.domain.Status.VERIFIED
+import com.example.excepcionesexcepcionales.solution.user.domain.Status.*
+import com.example.excepcionesexcepcionales.solution.user.domain.VerifyUserDomainError.*
 import java.time.ZonedDateTime
 
 data class SolutionUser(
@@ -35,16 +37,9 @@ data class SolutionUser(
             status: Status = INCOMPLETE,
             cardStatus: CardStatus = PENDING
         ) = SolutionUser(id, email, phoneNumber, createdOn, name, surname, documents, status, cardStatus)
-            .also { it.pushEvent(it.toUserCreatedEvent(id, email, phoneNumber, name, surname, createdOn, status, cardStatus))}
-    }
-
-
-    fun changeEmail(newEmail: Email): SolutionUser {
-        if(email == newEmail)
-            throw CannotChangeEmailToTheSameValueException()
-
-        return copy(email = newEmail)
-            .also { it.pushEvent(UserEmailChangedEvent(id.toString(), email.toString())) }
+            .also {
+                it.pushEvent(it.toUserCreatedEvent(id, email, phoneNumber, name, surname, createdOn, status, cardStatus))
+            }
     }
 
     fun verify(): SolutionUser {
@@ -57,7 +52,7 @@ data class SolutionUser(
     }
 
     private fun guardAllDocumentsAreVerified() =
-        if(documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit
+        if (documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit
         else throw NotAllDocumentVerifiedException()
 
     private fun guardStatusCanBeVerified() {
@@ -74,6 +69,33 @@ data class SolutionUser(
             CONFIRMED -> Unit
         }
     }
+
+    fun safeVerify(): Either<VerifyUserDomainError, SolutionUser> = either {
+        guardAllDocumentsAreVerifiedEither().bind()
+        guardStatusCanBeVerifiedEither().bind()
+        guardCardStatusToBeVerifiedEither().bind()
+
+        return copy(status = VERIFIED)
+            .also { it.pushEvent(UserVerifiedEvent(id.toString())) }
+            .right()
+    }
+
+    private fun guardAllDocumentsAreVerifiedEither() =
+        if(documents.all { document -> document.status == DocumentStatus.VERIFIED }) Unit.right()
+        else NotAllDocumentVerified.left()
+
+    private fun guardStatusCanBeVerifiedEither() =
+        when(status) {
+            INCOMPLETE -> UserStatusCannotBeVerified.left()
+            VERIFIED -> UserAlreadyVerified.left()
+            PENDING_VERIFICATION -> Unit.right()
+        }
+
+    private fun guardCardStatusToBeVerifiedEither() =
+        when(cardStatus) {
+            PENDING -> CardStatusNotConfirmed.left()
+            CONFIRMED -> Unit.right()
+        }
 
     private fun toUserCreatedEvent(
         id: UserId,
@@ -102,6 +124,13 @@ data class SolutionUser(
     class CardStatusNotConfirmedException() : RuntimeException()
     class CannotChangeEmailToTheSameValueException() : RuntimeException()
     class UserAlreadyExistsException() : RuntimeException()
+}
+
+sealed class VerifyUserDomainError {
+    object NotAllDocumentVerified : VerifyUserDomainError()
+    object UserAlreadyVerified : VerifyUserDomainError()
+    object UserStatusCannotBeVerified : VerifyUserDomainError()
+    object CardStatusNotConfirmed : VerifyUserDomainError()
 }
 
 

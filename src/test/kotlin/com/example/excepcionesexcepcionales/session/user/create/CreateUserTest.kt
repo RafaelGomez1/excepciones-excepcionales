@@ -8,6 +8,8 @@ import com.example.excepcionesexcepcionales.session.user.mothers.CreateUserComma
 import com.example.excepcionesexcepcionales.session.user.mothers.UserCreatedEventMother
 import com.example.excepcionesexcepcionales.session.user.mothers.UserMother
 import com.example.excepcionesexcepcionales.session.user.primaryAdapter.create.CreateUserController
+import com.example.excepcionesexcepcionales.solution.user.create.sealed.SealedCreateUserTest
+import com.example.excepcionesexcepcionales.solution.user.create.sealed.SealedCreateUserTest.Companion
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeClock
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeDomainEventPublisher
 import com.example.excepcionesexcepcionales.solution.user.fakes.FakeIdGenerator
@@ -54,8 +56,8 @@ class CreateUserTest {
         handler.handle(command)
 
         // Then
-        assertTrue { repository.contains(user) }
-        assertTrue { publisher.wasPublished(expectedEvent) }
+        repository.assertContains(user)
+        publisher.assertPublished(expectedEvent)
     }
 
     @Test
@@ -71,7 +73,7 @@ class CreateUserTest {
         }
 
         // Then
-        assertFalse { publisher.wasPublished(expectedEvent) }
+        publisher.assertNoEventsPublished()
     }
 
 //    @ParameterizedTest
